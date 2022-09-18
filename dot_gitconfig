@@ -1,0 +1,35 @@
+[alias]
+	clean-branches = "!f() { git fetch -p && for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done }; f"
+	co = "checkout"
+	cob = "checkout -b"
+	gco = "!f() { git checkout $(git branch | grep $1 | head -n 1); }; f"
+	fco = "!f() { if [ $1 ]; then git checkout $(git branch | sed 's/*/ /g' | fzf -1 --query $1); else git checkout $(git branch | sed 's/*/ /g' | fzf); fi }; f"
+	cb = "!f() { git clean-branches; }; f"
+	b = "branch"
+	c = "commit"
+	s = "stash"
+	p = "!f() { git push -u origin $(git rev-parse --abbrev-ref HEAD) $@; }; f"
+	aa = "add --all"
+	cm = "commit -m"
+	bsc = "branch --show-current"
+	m = "!f() { git checkout $1 && git pull; git checkout @{-1} && git merge $1; }; f"
+	cu = "branch --show-current"
+	logg = "log --oneline --graph"
+	amend = "commit --amend --no-edit"
+	show-unmerged = "!f() { git diff --name-status --diff-filter=U | cut -f2 ; }; f"
+	merge-conflicts = "!f() { grep -Hn \"^=======$\" $(git diff --name-status --diff-filter=U | cut -f2) ; }; f"
+[credential]
+	helper = store
+[include]
+	path = ~/.config/local_override/git/.gitconfig
+[difftool]
+	prompt = true
+[diff]
+	tool = nvimdiff
+[difftool "nvimdiff"]
+	cmd = "nvim -Md \"$LOCAL\" \"$REMOTE\""
+[user]
+	email = "git@ashtowner.com"
+	name = Ashley Towner
+[init]
+	defaultBranch = main
