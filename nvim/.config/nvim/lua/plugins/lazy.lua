@@ -11,8 +11,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local ai_enabled = os.getenv('NO_AI') ~= 'true'
-
 local plugins = {
 	{
 		'nvim-lua/plenary.nvim',
@@ -54,7 +52,7 @@ local plugins = {
 		config = function()
 			require('plugins.config.codeium')
 		end,
-		enabled = ai_enabled,
+		enabled = false,
 	},
 	-- Util
 	{
