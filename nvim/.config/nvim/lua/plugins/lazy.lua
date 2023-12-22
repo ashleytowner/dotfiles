@@ -301,11 +301,7 @@ local plugins = {
 		name = 'dracula',
 	},
 	{
-		'folke/tokyonight.nvim',
-		enabled = false,
-		config = function()
-			require('plugins.colorscheme')
-		end,
+		'folke/tokyonight.nvim'
 	},
 	{
 		'ray-x/aurora',

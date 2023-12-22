@@ -13,7 +13,7 @@ local lint_group = vim.api.nvim_create_augroup('Linters', { clear = true })
 
 vim.api.nvim_create_autocmd({ 'BufEnter', 'TextChanged', 'InsertLeave' }, {
 	callback = function()
-		require('lint').try_lint()
+		lint.try_lint()
 	end,
 	group = lint_group,
 })
