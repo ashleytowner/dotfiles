@@ -1,5 +1,5 @@
 local ts_utils = require('nvim-treesitter.ts_utils')
-local ts = require('plugins.config.treesitter')
+local ts = require('util').TS
 
 local function toggle_check()
 	local list_item = ts.get_parent_node_of_type({ 'list_item' })

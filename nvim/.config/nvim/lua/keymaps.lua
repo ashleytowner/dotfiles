@@ -1,34 +1,141 @@
 -- Text manipulation
-vim.keymap.set('n', 'J', 'mzJ`z', { noremap = true })
-vim.keymap.set('n', 'N', 'Nzz', { noremap = true })
-vim.keymap.set('n', 'n', 'nzz', { noremap = true })
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true })
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { noremap = true })
+vim.keymap.set(
+	'n',
+	'J',
+	'mzJ`z',
+	{ noremap = true, desc = 'Join lines without messing up cursor position' }
+)
+vim.keymap.set(
+	'n',
+	'N',
+	'Nzz',
+	{ noremap = true, desc = 'Go to previous search result and center it' }
+)
+vim.keymap.set(
+	'n',
+	'n',
+	'nzz',
+	{ noremap = true, desc = 'Go to next search result and center it' }
+)
+vim.keymap.set(
+	'v',
+	'J',
+	":m '>+1<CR>gv=gv",
+	{ noremap = true, desc = 'Move selected text down 1 line' }
+)
+vim.keymap.set(
+	'v',
+	'K',
+	":m '<-2<CR>gv=gv",
+	{ noremap = true, desc = 'Move selected text up 1 line' }
+)
 
 -- Clipboard
-vim.keymap.set('', '<leader>P', '"+P', { noremap = true })
-vim.keymap.set('', '<leader>Y', '"+y$', { noremap = true })
-vim.keymap.set('', '<leader>p', '"+p', { noremap = true })
-vim.keymap.set('', '<leader>y', '"+y', { noremap = true })
+vim.keymap.set(
+	'',
+	'<leader>P',
+	'"+P',
+	{ noremap = true, desc = 'Paste from system clipboard' }
+)
+vim.keymap.set(
+	'',
+	'<leader>Y',
+	'"+y$',
+	{ noremap = true, desc = 'Yank to system clipboard' }
+)
+vim.keymap.set(
+	'',
+	'<leader>p',
+	'"+p',
+	{ noremap = true, desc = 'Paste from system clipboard' }
+)
+vim.keymap.set(
+	'',
+	'<leader>y',
+	'"+y',
+	{ noremap = true, desc = 'Yank to system clipboard' }
+)
 
 -- File Navigation
-vim.keymap.set('n', '[q', '<cmd>cprev<cr>')
-vim.keymap.set('n', ']q', '<cmd>cnext<cr>')
-vim.keymap.set('n', '<C-PageDown>', ':bnext<CR>', { noremap = true })
-vim.keymap.set('n', '<C-PageUp>', ':bprev<CR>', { noremap = true })
-vim.keymap.set('n', 'gw', '<C-w>w', { noremap = true })
-vim.keymap.set('n', 'gW', '<C-w>W', { noremap = true })
-vim.keymap.set('n', '<C-u>', '<C-u>zz', { noremap = true })
-vim.keymap.set('n', '<C-d>', '<C-d>zz', { noremap = true })
-vim.keymap.set('n', '<C-6>', '<C-^>', { noremap = true })
+vim.keymap.set('n', '[q', '<cmd>cprev<cr>', { desc = 'Previous quickfix item' })
+vim.keymap.set('n', ']q', '<cmd>cnext<cr>', { desc = 'Next quickfix item' })
+vim.keymap.set(
+	'n',
+	'<C-PageDown>',
+	':bnext<CR>',
+	{ noremap = true, desc = 'Next buffer' }
+)
+vim.keymap.set(
+	'n',
+	'<C-PageUp>',
+	':bprev<CR>',
+	{ noremap = true, desc = 'Previous buffer' }
+)
+vim.keymap.set('n', 'gw', '<C-w>w', { noremap = true, desc = 'Next window' })
+vim.keymap.set(
+	'n',
+	'gW',
+	'<C-w>W',
+	{ noremap = true, desc = 'Previous window' }
+)
+vim.keymap.set(
+	'n',
+	'<C-u>',
+	'<C-u>zz',
+	{ noremap = true, desc = 'Scroll up and center' }
+)
+vim.keymap.set(
+	'n',
+	'<C-d>',
+	'<C-d>zz',
+	{ noremap = true, desc = 'Scroll down and center' }
+)
+vim.keymap.set(
+	'n',
+	'<C-6>',
+	'<C-^>',
+	{ noremap = true, desc = 'Switch to previous buffer' }
+)
 
 -- Terminal
-vim.keymap.set('t', '<C-\\>', '<C-\\><C-n><C-w>w', { noremap = true })
-vim.keymap.set('t', '<C-n>', '<C-\\><C-n>', { noremap = true })
+vim.keymap.set(
+	't',
+	'<C-\\>',
+	'<C-\\><C-n><C-w>w',
+	{ noremap = true, desc = 'Next window out of terminal' }
+)
+vim.keymap.set(
+	't',
+	'<C-n>',
+	'<C-\\><C-n>',
+	{ noremap = true, desc = 'Exit terminal mode' }
+)
 
-vim.keymap.set('', '<leader>/', function ()
+-- Diff commands
+if vim.wo.diff then
+	vim.keymap.set(
+		'n',
+		'<leader>1',
+		':diffget 1<CR>',
+		{ noremap = true, desc = 'Get diff from left' }
+	)
+	vim.keymap.set(
+		'n',
+		'<leader>2',
+		':diffget 2<CR>',
+		{ noremap = true, desc = 'Get diff from middle' }
+	)
+	vim.keymap.set(
+		'n',
+		'<leader>3',
+		':diffget 3<CR>',
+		{ noremap = true, desc = 'Get diff from right' }
+	)
+end
+
+vim.keymap.set('', '<leader>/', function()
 	local bufs = require('util').get_buffers()
-	local terminal_buffer = -1;
+	local terminal_buffer = -1
 
 	for _, buf in ipairs(bufs) do
 		if vim.api.nvim_buf_get_option(buf.number, 'buftype') == 'terminal' then
@@ -55,5 +162,4 @@ vim.keymap.set('', '<leader>/', function ()
 			vim.cmd('sbuffer ' .. terminal_buffer)
 		end
 	end
-
-end, { noremap = true })
+end, { noremap = true, desc = 'Open terminal' })

@@ -11,3 +11,4 @@ home/zshrc
 .zsh_history
 .zcompcache
 nvim/.config/nvim/plugin/
+*.log

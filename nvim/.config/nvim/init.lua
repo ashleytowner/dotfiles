@@ -1,12 +1,30 @@
 vim.g.mapleader = ' '
 
-Util = require('util')
 require('plugins')
-require('statusline')
-require('tabline')
-require('bufferline')
-require('foldtext')
+Util = require('util')
+require('lines')
 
+--- colorscheme
+require('catppuccin').setup({
+	background = {
+		light = "latte",
+		dark = "macchiato"
+	},
+	show_end_of_buffer = true,
+	integrations = {
+		cmp = true,
+		gitsigns = true,
+		hop = true,
+		mason = true,
+		nvimtree = true,
+		telescope = {
+			enabled = true,
+			style = 'nvchad'
+		}
+	}
+})
+
+vim.cmd([[colorscheme catppuccin]])
 
 -- highlight text on yank
 local yank_highlight_group =
@@ -23,11 +41,31 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 	end,
 })
 
+---Get the text for a foldline
+---@return string
+function FoldText()
+	return ' '
+		.. vim.fn.getline(vim.v.foldstart)
+		.. ' ('
+		.. (vim.v.foldend - vim.v.foldstart)
+		.. ' lines)'
+end
+
+-- Define some symbols which can also be treated as wrappers around textobjects
+Util.create_wrapped_textobject('*')
+Util.create_wrapped_textobject('/')
+Util.create_wrapped_textobject('.')
+Util.create_wrapped_textobject('_')
+Util.create_wrapped_textobject('|')
+Util.create_wrapped_textobject('$')
+Util.create_wrapped_textobject('#')
+
 vim.o.expandtab = false
 vim.o.wildignore = 'node_modules/*'
 vim.o.foldlevel = 99
 vim.o.hlsearch = false
-vim.o.listchars = 'tab:| ,trail:·,nbsp:░'
+vim.o.showbreak='↪\\'
+vim.o.listchars = 'tab:▎ ,trail:·,nbsp:␣,extends:⟩,precedes:⟨'
 vim.o.number = true
 vim.o.pyxversion = 3
 vim.o.relativenumber = true
@@ -40,10 +78,10 @@ vim.o.updatetime = 300
 vim.wo.cursorline = true
 vim.wo.colorcolumn = '80'
 vim.wo.list = true
-vim.wo.wrap = false
+vim.wo.wrap = true
 vim.opt.foldmethod = 'expr'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
-vim.wo.signcolumn = 'auto:1-9'
+vim.wo.signcolumn = 'auto:3-9'
 vim.go.statusline = '%!v:lua.StatusLine()'
 vim.go.tabline = '%!v:lua.TabLine()'
 vim.go.showtabline = 2
@@ -53,14 +91,9 @@ vim.go.splitbelow = true
 vim.go.splitright = true
 vim.o.foldtext = 'v:lua.FoldText()'
 
-if (vim.wo.diff) then
-	vim.keymap.set('n', '<leader>1', ':diffget 1<CR>', { noremap = true })
-	vim.keymap.set('n', '<leader>2', ':diffget 2<CR>', { noremap = true })
-	vim.keymap.set('n', '<leader>3', ':diffget 3<CR>', { noremap = true })
-end
-
 vim.g.markdown_fenced_languages = {
 	'ts=typescript',
+	'tsx=typescriptreact',
 	'zsh=zsh',
 	'sh=sh',
 	'bash=bash',
@@ -72,8 +105,28 @@ vim.cmd('filetype plugin on')
 vim.cmd('syntax enable')
 
 require('keymaps')
-require('setupLocalConfigs')
 
 if (vim.g.neovide) then
 	vim.o.guifont = 'JetBrains Mono:h18'
 end
+
+--- Setup for machine-specific configurations
+vim.api.nvim_exec(
+	[[
+let $LOCALFILE=expand("~/.config/local_override/nvim/init.vim")
+if filereadable($LOCALFILE)
+	source $LOCALFILE
+endif
+]],
+	false
+)
+
+vim.api.nvim_exec(
+	[[
+let $REPOCONFIG=expand('./.vim/init.vim')
+if filereadable($REPOCONFIG)
+	source $REPOCONFIG
+endif
+]],
+	false
+)
