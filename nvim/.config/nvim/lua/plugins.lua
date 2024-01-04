@@ -54,11 +54,11 @@ local plugins = {
 
 			vim.keymap.set('n', '<F4>', function()
 				require('dap').continue()
-			end)
+			end, { desc = 'Debugger: continue' })
 
 			vim.keymap.set('n', '<leader>b', function()
 				require('dap').toggle_breakpoint()
-			end)
+			end, { desc = 'Debugger: toggle breakpoint' })
 
 			-- listeners
 			require('dap').listeners.after.event_initialized['dapui'] = function(
@@ -80,16 +80,16 @@ local plugins = {
 				vim.o.mouse = 'nv'
 				vim.keymap.set('n', '<F3>', function()
 					require('dap').step_over()
-				end)
+				end, { desc = 'Debugger: step over' })
 				vim.keymap.set('n', '<F2>', function()
 					require('dap').step_into()
-				end)
+				end, { desc = 'Debugger: step into' })
 				vim.keymap.set('n', '<F12>', function()
 					require('dap').step_out()
-				end)
+				end, { desc = 'Debugger: step out' })
 				vim.keymap.set('n', '<C-c>', function()
 					require('dap').terminate()
-				end)
+				end, { desc = 'Debugger: terminate' })
 			end
 
 			require('dap').listeners.before.event_terminated['keymaps'] = function(
@@ -141,30 +141,33 @@ local plugins = {
 				'i',
 				'<C-g>n',
 				'<CMD>call codeium#CycleCompletions(1)<CR>',
-				{ noremap = true }
+				{ noremap = true, desc = 'Cycle to next codeium completion' }
 			)
 
 			vim.keymap.set(
 				'i',
 				'<C-g>p',
 				'<CMD>call codeium#CycleCompletions(-1)<CR>',
-				{ noremap = true }
+				{
+					noremap = true,
+					desc = 'Cycle to previous codeium completion',
+				}
 			)
 
 			vim.keymap.set(
 				'i',
 				'<C-g><CR>',
 				'<CMD>call codeium#Accept()<CR>',
-				{ noremap = true }
+				{ noremap = true, desc = 'Accept codeium completion' }
 			)
 
 			vim.keymap.set(
 				'i',
 				'<C-g><C-e>',
 				'<CMD>call codeium#Clear()<CR>',
-				{ noremap = true }
+				{ noremap = true, desc = 'Clear codeium completion' }
 			)
-		end
+		end,
 	},
 	-- Util
 	{
@@ -185,11 +188,32 @@ local plugins = {
 	{
 		'tpope/vim-surround',
 		config = function()
-			vim.keymap.set('n', 'SS', '<Plug>YSsurround', { silent = true })
-			vim.keymap.set('n', 'Ss', '<Plug>YSsurround', { silent = true })
-			vim.keymap.set('n', 'ss', '<Plug>Yssurround', { silent = true })
-			vim.keymap.set('n', 'S', '<Plug>YSurround', { silent = true })
-			vim.keymap.set('n', 's', '<Plug>Ysurround', { silent = true })
+			vim.keymap.set(
+				'n',
+				'SS',
+				'<Plug>YSsurround',
+				{ silent = true, desc = 'Surround around line' }
+			)
+			vim.keymap.set(
+				'n',
+				'Ss',
+				'<Plug>YSsurround',
+				{ silent = true, desc = 'Surround around line' }
+			)
+			vim.keymap.set(
+				'n',
+				'ss',
+				'<Plug>Yssurround',
+				{ silent = true, desc = 'Surround in line' }
+			)
+			vim.keymap.set('n', 'S', '<Plug>YSurround', {
+				silent = true,
+				desc = 'Start surround around operation, accepts a motion',
+			})
+			vim.keymap.set('n', 's', '<Plug>Ysurround', {
+				silent = true,
+				desc = 'Start surround operation, accepts a motion',
+			})
 		end,
 		dependencies = {
 			'tpope/vim-repeat',
@@ -210,13 +234,48 @@ local plugins = {
 	{
 		'bkad/CamelCaseMotion',
 		config = function()
-			vim.keymap.set('', ',w', '<Plug>CamelCaseMotion_w')
-			vim.keymap.set('', ',b', '<Plug>CamelCaseMotion_b')
-			vim.keymap.set('', ',e', '<Plug>CamelCaseMotion_e')
-			vim.keymap.set('', 'g,e', '<Plug>CamelCaseMotion_ge')
-			vim.keymap.set({ 'x', 'o' }, 'i,w', '<Plug>CamelCaseMotion_iw')
-			vim.keymap.set({ 'x', 'o' }, 'i,b', '<Plug>CamelCaseMotion_ib')
-			vim.keymap.set({ 'x', 'o' }, 'i,e', '<Plug>CamelCaseMotion_ie')
+			vim.keymap.set(
+				'',
+				',w',
+				'<Plug>CamelCaseMotion_w',
+				{ desc = 'CamelCaseMotion w' }
+			)
+			vim.keymap.set(
+				'',
+				',b',
+				'<Plug>CamelCaseMotion_b',
+				{ desc = 'CamelCaseMotion b' }
+			)
+			vim.keymap.set(
+				'',
+				',e',
+				'<Plug>CamelCaseMotion_e',
+				{ desc = 'CamelCaseMotion e' }
+			)
+			vim.keymap.set(
+				'',
+				'g,e',
+				'<Plug>CamelCaseMotion_ge',
+				{ desc = 'CamelCaseMotion ge' }
+			)
+			vim.keymap.set(
+				{ 'x', 'o' },
+				'i,w',
+				'<Plug>CamelCaseMotion_iw',
+				{ desc = 'CamelCaseMotion iw' }
+			)
+			vim.keymap.set(
+				{ 'x', 'o' },
+				'i,b',
+				'<Plug>CamelCaseMotion_ib',
+				{ desc = 'CamelCaseMotion ib' }
+			)
+			vim.keymap.set(
+				{ 'x', 'o' },
+				'i,e',
+				'<Plug>CamelCaseMotion_ie',
+				{ desc = 'CamelCaseMotion ie' }
+			)
 		end,
 	},
 	{
@@ -230,18 +289,18 @@ local plugins = {
 
 			vim.keymap.set('n', '<leader>w', function()
 				require('hop').hint_words()
-			end, { noremap = true })
+			end, { noremap = true, desc = 'Hop words' })
 
 			vim.keymap.set('n', '<leader>f', function()
 				require('hop').hint_char1()
-			end, { noremap = true })
+			end, { noremap = true, desc = 'Hop character' })
 
 			vim.keymap.set('n', '<leader>s', function()
 				require('hop').hint_char2({
 					hint_position = require('hop.hint').HintPosition.END,
 					hint_offset = -1,
 				})
-			end, { noremap = true })
+			end, { noremap = true, desc = 'Hop 2 characters' })
 		end,
 	},
 	{
@@ -317,14 +376,39 @@ local plugins = {
 				},
 			})
 
-			vim.keymap.set('n', 'gsh', gs.preview_hunk)
+			vim.keymap.set(
+				'n',
+				'gsh',
+				gs.preview_hunk,
+				{ desc = 'GitSigns preview hunk' }
+			)
 			vim.keymap.set('n', 'gsb', function()
 				gs.blame_line({ full = true })
-			end)
-			vim.keymap.set('n', 'gss', gs.stage_hunk)
-			vim.keymap.set('n', 'gsS', gs.undo_stage_hunk)
-			vim.keymap.set('n', ']h', gs.next_hunk)
-			vim.keymap.set('n', '[h', gs.prev_hunk)
+			end, { desc = 'GitSigns blame line' })
+			vim.keymap.set(
+				'n',
+				'gss',
+				gs.stage_hunk,
+				{ desc = 'GitSigns stage hunk' }
+			)
+			vim.keymap.set(
+				'n',
+				'gsS',
+				gs.undo_stage_hunk,
+				{ desc = 'GitSigns undo stage hunk' }
+			)
+			vim.keymap.set(
+				'n',
+				']h',
+				gs.next_hunk,
+				{ desc = 'GitSigns next hunk' }
+			)
+			vim.keymap.set(
+				'n',
+				'[h',
+				gs.prev_hunk,
+				{ desc = 'GitSigns prev hunk' }
+			)
 		end,
 		dependencies = {
 			'nvim-lua/plenary.nvim',
@@ -337,7 +421,7 @@ local plugins = {
 				'n',
 				'gim',
 				'<cmd>Gvdiffsplit!<cr>',
-				{ noremap = true }
+				{ noremap = true, desc = 'Git diff split' }
 			)
 		end,
 		cmd = 'Git',
@@ -449,9 +533,19 @@ local plugins = {
 			local builtin = require('telescope.builtin')
 
 			-- Keymaps
-			vim.keymap.set('n', '<C-f>', builtin.live_grep, { noremap = true })
+			vim.keymap.set(
+				'n',
+				'<C-f>',
+				builtin.live_grep,
+				{ noremap = true, desc = 'Telescope live grep' }
+			)
 
-			vim.keymap.set('n', '<C-p>', builtin.find_files, { noremap = true })
+			vim.keymap.set(
+				'n',
+				'<C-p>',
+				builtin.find_files,
+				{ noremap = true, desc = 'Telescope find files' }
+			)
 
 			vim.keymap.set('n', '<C-M-p>', function()
 				builtin.find_files({
@@ -461,62 +555,55 @@ local plugins = {
 						'--files',
 					},
 				})
-			end, { noremap = true })
+			end, { noremap = true, desc = 'Telescope find files' })
 
 			vim.keymap.set(
 				'n',
 				'<leader>tq',
 				builtin.quickfix,
-				{ noremap = true }
+				{ noremap = true, desc = 'Telescope quickfix' }
 			)
 
 			vim.keymap.set(
 				'n',
 				'<leader>tg',
 				builtin.git_branches,
-				{ noremap = true }
-			)
-
-			vim.keymap.set(
-				'n',
-				'<leader>tb',
-				builtin.buffers,
-				{ noremap = true }
+				{ noremap = true, desc = 'Telescope git branches' }
 			)
 
 			vim.keymap.set(
 				{ 'x', 'n' },
 				'<leader>rr',
 				require('telescope').extensions.refactoring.refactors,
-				{ noremap = true }
+				{ noremap = true, desc = 'Telescope refactor' }
 			)
 
 			vim.keymap.set(
 				'n',
 				'<leader>tp',
 				builtin.resume,
-				{ noremap = true }
+				{ noremap = true, desc = 'Show previous telescope popup' }
 			)
 
 			vim.keymap.set(
 				'n',
 				'<leader>tc',
 				builtin.colorscheme,
-				{ noremap = true }
+				{ noremap = true, desc = 'Telescope pick colorscheme' }
 			)
 
 			vim.keymap.set(
 				'n',
 				'<leader>ls',
 				builtin.buffers,
-				{ noremap = true }
+				{ noremap = true, desc = 'Telescope buffers' }
 			)
 
 			vim.keymap.set('n', '<leader>todo', function()
 				builtin.live_grep({
 					default_text = '(TODO|NOTE|BUG|HACK|WARN|WARNING)(\\(\\w+\\))?:',
 				})
-			end, { noremap = true })
+			end, { noremap = true, desc = 'Telescope TODOs' })
 		end,
 		dependencies = {
 			{
@@ -603,7 +690,12 @@ local plugins = {
 	{
 		'mbbill/undotree',
 		config = function()
-			vim.keymap.set('n', '<leader>u', '<CMD>UndotreeToggle<CR>')
+			vim.keymap.set(
+				'n',
+				'<leader>u',
+				'<CMD>UndotreeToggle<CR>',
+				{ desc = 'Toggle undotree' }
+			)
 		end,
 	},
 	-- LSP, Completion & Formatting
@@ -695,7 +787,7 @@ local plugins = {
 				else
 					vim.lsp.buf.format()
 				end
-			end, { noremap = true, silent = true })
+			end, { noremap = true, silent = true, desc = 'Format file' })
 		end,
 	},
 	{
@@ -868,7 +960,6 @@ local plugins = {
 					enable = true,
 				},
 			})
-
 		end,
 	},
 	{
@@ -883,16 +974,16 @@ local plugins = {
 	{
 		'rebelot/kanagawa.nvim',
 		enabled = false,
-		name = 'kanagawa'
+		name = 'kanagawa',
 	},
 	{
 		'catppuccin/nvim',
-		name = 'catppuccin'
+		name = 'catppuccin',
 	},
 	{
 		'dracula/vim',
 		enabled = false,
-		name = 'dracula'
+		name = 'dracula',
 	},
 	{
 		'folke/tokyonight.nvim',
