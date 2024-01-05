@@ -174,16 +174,6 @@ local plugins = {
 		'dstein64/vim-startuptime',
 		cmd = 'StartupTime',
 	},
-	{
-		'akinsho/toggleterm.nvim',
-		enabled = false,
-		config = function()
-			require('toggleterm').setup({
-				open_mapping = [[<C-\>]],
-				direction = 'float',
-			})
-		end,
-	},
 	-- Motions & Objects
 	{
 		'tpope/vim-surround',
@@ -302,30 +292,6 @@ local plugins = {
 				})
 			end, { noremap = true, desc = 'Hop 2 characters' })
 		end,
-	},
-	{
-		'windwp/nvim-autopairs',
-		config = function()
-			require('nvim-autopairs').setup({
-				disable_in_macro = true,
-			})
-
-			-- set up auto pairs on cmp completions
-			local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-			local cmp_err, cmp = pcall(require, 'cmp')
-			if not cmp_err then
-				cmp.event:on(
-					'confirm_done',
-					cmp_autopairs.on_confirm_done({ map_char = { tex = '' } })
-				)
-
-				cmp_autopairs.lisp[#cmp_autopairs.lisp + 1] = 'racket'
-			end
-		end,
-		-- after = {
-		-- 'nvim-cmp',
-		-- },
-		enabled = false,
 	},
 	{
 		'mattn/emmet-vim',
@@ -542,6 +508,16 @@ local plugins = {
 
 			vim.keymap.set(
 				'n',
+				'<leader>*',
+				builtin.grep_string,
+				{
+					noremap = true,
+					desc = 'Telescope grep word under cursor or selection',
+				}
+			)
+
+			vim.keymap.set(
+				'n',
 				'<C-p>',
 				builtin.find_files,
 				{ noremap = true, desc = 'Telescope find files' }
@@ -618,25 +594,14 @@ local plugins = {
 		},
 	},
 	{
-		'stevearc/oil.nvim',
-		opts = {},
-		config = function()
-			require('oil').setup({
-				default_file_explorer = false,
-				view_options = {
-					show_hidden = true,
-				},
-			})
-			vim.keymap.set(
-				'n',
-				'-',
-				'<CMD>Oil<CR>',
-				{ desc = 'Open parent directory' }
-			)
-		end,
+		'tpope/vim-vinegar'
+	},
+	{
+		'kyazdani42/nvim-web-devicons',
 	},
 	{
 		'kyazdani42/nvim-tree.lua',
+		enabled = false,
 		dependencies = {
 			{
 				'kyazdani42/nvim-web-devicons',
@@ -968,22 +933,8 @@ local plugins = {
 	},
 	-- Theming
 	{
-		'haishanh/night-owl.vim',
-		enabled = false,
-	},
-	{
-		'rebelot/kanagawa.nvim',
-		enabled = false,
-		name = 'kanagawa',
-	},
-	{
 		'catppuccin/nvim',
 		name = 'catppuccin',
-	},
-	{
-		'dracula/vim',
-		enabled = false,
-		name = 'dracula',
 	},
 	{
 		'folke/tokyonight.nvim',

@@ -163,3 +163,7 @@ vim.keymap.set('', '<leader>/', function()
 		end
 	end
 end, { noremap = true, desc = 'Open terminal' })
+
+-- Files
+
+-- vim.keymap.set('n', '-', '<CMD>Ex<CR>', { desc = 'File explorer' })
