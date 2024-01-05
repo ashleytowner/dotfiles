@@ -937,6 +937,17 @@ local plugins = {
 		name = 'catppuccin',
 	},
 	{
+		'rose-pine/neovim',
+		name = 'rose-pine',
+		config = function()
+			require('rose-pine').setup({
+				variant = 'moon',
+				dark_variant = 'moon',
+				disable_italics = false,
+			})
+		end
+	},
+	{
 		'folke/tokyonight.nvim',
 	},
 	{
