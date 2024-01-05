@@ -124,7 +124,7 @@ local function buffer_label()
 	local fg = util.get_color('Constant', 'fg')
 	local bg = util.get_color('StatusLine', 'bg')
 	util.create_highlight_group('BufferIconStatusLine', fg, bg)
-	return color_when_focused('BufferIconStatusLine') .. ' %* %n %q '
+	return color_when_focused('BufferIconStatusLine') .. ' #%* %n %q '
 end
 
 -- Asynchronously set git status variables
@@ -260,7 +260,7 @@ local function git_branch()
 		.. util.ternary(
 			vim.g.git_branch ~= '',
 			vim.g.git_branch
-				.. ' %#FiletypeStatusLine#['
+				.. color_when_focused('FileTypeStatusLine') .. ' ['
 				.. vim.g.git_commit
 				.. ']%*',
 			vim.g.git_commit
