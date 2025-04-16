@@ -10,6 +10,7 @@
 #
 # ==================================================
 
+export PATH="$PATH:$HOME/bin"
 
 #{{{ *exports*
 # XDG Standards
