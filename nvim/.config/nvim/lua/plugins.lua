@@ -140,9 +140,8 @@ local plugins = {
 				builtin.find_files({
 					find_command = {
 						'rg',
-						'--hidden',
-						'--files',
-						'--no-ignore-vcs'
+						'-uuu',
+						'--files'
 					},
 				})
 			end, { noremap = true, desc = 'Telescope find files' })
