@@ -12,3 +12,5 @@ home/zshrc
 .zcompcache
 nvim/.config/nvim/plugin/
 *.log
+beets/.config/beets/library.db
+beets/.config/beets/state.pickle
