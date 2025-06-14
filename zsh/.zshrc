@@ -21,7 +21,7 @@ export EMPTY_COMMAND='' # If an empty command is entered, this command will be r
 
 export FZF_COMPLETION_OPTS=""
 export FZF_COMPLETION_TRIGGER='**'
-export FZF_DEFAULT_COMMAND='rg --files --hidden -g "!.git/*"'
+export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export FZF_DEFAULT_DIR_COMMAND='find . -type d -not -path "*/.git/*" -not -path "*/.git"'
 
 # Defaults
@@ -55,7 +55,7 @@ tabs -2
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  eval $FZF_DEFAULT_COMMAND
+  rg --files --hidden
 }
 
 # Use fd to generate the list for directory completion
@@ -77,6 +77,8 @@ alias -g ...="../.."
 alias -g ....="../../.."
 alias -g .....="../../../.."
 alias -g ......="../../../../.."
+
+alias unzip-all="find . -maxdepth 1 -name '*.zip' | parallel unzip '{}' -d '{.}'"
 
 # Set a yank & put command
 if which xclip > /dev/null
