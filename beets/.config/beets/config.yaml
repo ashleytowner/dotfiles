@@ -1,8 +1,9 @@
 plugins: fetchart lyrics lastgenre embedart
+directory: ~/Music/Library
 
 import:
   write: true
-  move: true
+  move: false
   incremental: true
 
 fetchart:
