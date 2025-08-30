@@ -181,6 +181,35 @@ if not (masonLspOk or lspConfigOk) then
 	return
 end
 
+vim.lsp.config('*', {
+	on_attach = function()
+		set_keymaps()
+	end
+});
+
+vim.lsp.config('lua_ls', {
+	settings = {
+		Lua = {
+			runtime = {
+				version = 'LuaJIT'
+			},
+			diagnostics = {
+				globals = {
+					'vim',
+					'require'
+				}
+			}
+		}
+	}
+})
+
+vim.lsp.config('ts_ls', {
+	on_attach = function(client)
+		client.server_capabilities.documentFormattingProvider = false
+		set_keymaps()
+	end
+});
+
 masonLsp.setup({
 	ensure_installed = {
 		'bashls',
@@ -192,28 +221,6 @@ masonLsp.setup({
 		'ts_ls',
 		'vimls',
 	},
-})
-
-masonLsp.setup_handlers({
-	-- The first entry (without a key) will be the default handler
-	-- and will be called for each installed server that doesn't have
-	-- a dedicated handler.
-	function(server_name)
-		lspConfig[server_name].setup({
-			on_attach = function()
-				set_keymaps()
-			end,
-		})
-	end,
-	['ts_ls'] = function(server_name)
-		lspConfig[server_name].setup({
-			on_attach = function(client)
-				-- Use linters & formatters instead
-				client.server_capabilities.documentFormattingProvider = false
-				set_keymaps()
-			end,
-		})
-	end,
 })
 
 local ascii_border = {

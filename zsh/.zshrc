@@ -24,6 +24,11 @@ export FZF_COMPLETION_TRIGGER='**'
 export FZF_DEFAULT_COMMAND='rg --files --hidden'
 export FZF_DEFAULT_DIR_COMMAND='find . -type d -not -path "*/.git/*" -not -path "*/.git"'
 
+export CC="clang-20"
+export CXX="clang++-20"
+
+export PATH="$PATH:/usr/local/go/bin:/opt"
+
 # Defaults
 export EDITOR="$(which nvim)"
 export PAGER="less"
@@ -176,4 +181,12 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+if [[ "$TERM" == "xterm-kitty" ]]; then
+  alias ssh='kitty +kitten ssh'
+fi
+
 # vim: foldmethod=marker foldlevel=99
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
