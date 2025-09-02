@@ -174,7 +174,7 @@ if [ -f $XDG_CONFIG_HOME/local_override/zsh/.zshrc ]; then
   source $XDG_CONFIG_HOME/local_override/zsh/.zshrc
 fi
 
-[ -f $XDG_CONFIG_HOME/fzf/.fzf.zsh ] && source $XDG_CONFIG_HOME/fzf/.fzf.zsh
+source <(fzf --zsh)
  # }}}
 
 export NVM_DIR="$HOME/.config/nvm"
