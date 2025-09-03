@@ -448,59 +448,6 @@ local plugins = {
 		},
 	},
 	{
-		'nvim-tree/nvim-tree.lua',
-		lazy = true,
-		dependencies = {
-			{
-				'nvim-tree/nvim-web-devicons',
-			},
-		},
-		config = function()
-			require('nvim-tree').setup({
-				git = {
-					ignore = false,
-				},
-				diagnostics = {
-					enable = true,
-				},
-				view = {
-					side = 'right',
-				},
-
-				renderer = {
-					highlight_git = true,
-					icons = {
-						git_placement = 'after',
-						show = {
-							file = true,
-							folder = true,
-							folder_arrow = false,
-							git = true,
-						},
-						glyphs = {
-							git = {
-								unstaged = '!',
-								staged = '+',
-								unmerged = '',
-								renamed = '➜',
-								untracked = '?',
-								deleted = '',
-								ignored = '◌',
-							},
-						},
-					},
-				},
-			})
-
-			vim.keymap.set(
-				'n',
-				'<leader><leader>',
-				'<cmd>NvimTreeFindFileToggle<cr>',
-				{ noremap = true, desc = 'open nvim tree' }
-			)
-		end,
-	},
-	{
 		'mbbill/undotree',
 		config = function()
 			vim.keymap.set(
@@ -591,11 +538,7 @@ local plugins = {
 	},
 	-- LSP, Completion, Debugging & Formatting
 	{
-		'mattn/emmet-vim',
-		enabled = false
-	},
-	{
-		'williamboman/mason.nvim',
+		'mason-org/mason.nvim',
 		config = function()
 			local masonOk, mason = pcall(require, 'mason')
 
@@ -611,7 +554,7 @@ local plugins = {
 		'jay-babu/mason-nvim-dap.nvim',
 		dependencies = {
 			{ 'mfussenegger/nvim-dap' },
-			{ 'williamboman/mason.nvim' },
+			{ 'mason-org/mason.nvim' },
 			{ 'theHamsta/nvim-dap-virtual-text' },
 			{
 				'rcarriga/nvim-dap-ui',
@@ -696,7 +639,7 @@ local plugins = {
 		dependencies = {
 			{
 				'folke/neodev.nvim',
-				'williamboman/mason-lspconfig.nvim',
+				'mason-org/mason-lspconfig.nvim',
 			},
 		},
 	},
@@ -1302,32 +1245,8 @@ local plugins = {
 		end,
 	},
 	{
-		'rose-pine/neovim',
-		name = 'rose-pine',
-		lazy = true,
-		config = function()
-			require('rose-pine').setup({
-				variant = 'moon',
-				dark_variant = 'moon',
-				disable_italics = false,
-			})
-		end,
-	},
-	{
 		'folke/tokyonight.nvim',
 		lazy = true,
-	},
-	{
-		'ray-x/aurora',
-		lazy = true,
-	},
-	{
-		'rafamadriz/neon',
-		lazy = true,
-	},
-	{
-		'samharju/synthweave.nvim',
-		lazy = true
 	},
 	-- Util
 	{
