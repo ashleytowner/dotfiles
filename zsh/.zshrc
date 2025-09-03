@@ -27,7 +27,7 @@ export FZF_DEFAULT_DIR_COMMAND='find . -type d -not -path "*/.git/*" -not -path 
 export CC="clang-20"
 export CXX="clang++-20"
 
-export PATH="$PATH:/usr/local/go/bin:/opt"
+export PATH="$PATH:/usr/local/go/bin:/opt:$HOME/bin:/opt/homebrew/bin"
 
 # Defaults
 export EDITOR="$(which nvim)"
