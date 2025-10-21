@@ -1,4 +1,5 @@
-theme=catppuccin-macchiato
+theme=Catppuccin Macchiato
 font-size=20
 window-height=1000
 window-width=1000
+keybind = shift+enter=text:\x1b\r
