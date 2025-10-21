@@ -1,6 +1,7 @@
 local tscpOk, tscp = pcall(require, 'telescope.builtin')
 
 local function set_keymaps()
+	print("Hello");
 	vim.keymap.set({ 'n', 'i' }, '<C-k>', vim.lsp.buf.signature_help, {
 		noremap = true,
 		silent = true,
