@@ -1,7 +1,6 @@
 local tscpOk, tscp = pcall(require, 'telescope.builtin')
 
 local function set_keymaps()
-	print("Hello");
 	vim.keymap.set({ 'n', 'i' }, '<C-k>', vim.lsp.buf.signature_help, {
 		noremap = true,
 		silent = true,
@@ -182,11 +181,17 @@ if not (masonLspOk or lspConfigOk) then
 	return
 end
 
-vim.lsp.config('*', {
-	on_attach = function()
+-- vim.lsp.config('*', {
+-- 	on_attach = function()
+-- 		set_keymaps()
+-- 	end
+-- });
+
+vim.api.nvim_create_autocmd('LspAttach', {
+	callback = function()
 		set_keymaps()
 	end
-});
+})
 
 vim.lsp.config('lua_ls', {
 	settings = {
@@ -207,9 +212,10 @@ vim.lsp.config('lua_ls', {
 vim.lsp.config('ts_ls', {
 	on_attach = function(client)
 		client.server_capabilities.documentFormattingProvider = false
-		set_keymaps()
 	end
 });
+
+
 
 masonLsp.setup({
 	ensure_installed = {
