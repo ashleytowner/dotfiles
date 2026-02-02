@@ -1,29 +1,34 @@
-plugins: fetchart lyrics lastgenre embedart
+plugins: fetchart lastgenre embedart fromfilename chroma
 directory: ~/Music/Library
 
 import:
   write: true
   move: false
-  incremental: true
+  incremental: false
+
+paths:
+    default: $albumartist - $album%aunique{}/$track $title
+    singleton: Non-Album/$artist/$title
+    comp: Compilations/$album%aunique{}/$track $title
 
 fetchart:
   cautious: true
   sources: [filesystem, itunes, amazon, coverart, albumart]
 
-lyrics:
-    auto: true
-    translate:
-        api_key:
-        from_languages: []
-        to_language:
-    dist_thresh: 0.11
-    fallback: null
-    force: no
-    google_API_key: null
-    google_engine_ID: 009217259823014548361:lndtuqkycfu
-    print: no
-    sources: [lrclib, genius]
-    synced: no
+# lyrics:
+#     auto: true
+#     translate:
+#         api_key:
+#         from_languages: []
+#         to_language:
+#     dist_thresh: 0.11
+#     fallback: null
+#     force: no
+#     google_API_key: null
+#     google_engine_ID: 009217259823014548361:lndtuqkycfu
+#     print: no
+#     sources: [lrclib, genius]
+#     synced: no
 
 lastgenre:
   force: true
