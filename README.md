@@ -36,4 +36,5 @@ Sometimes you may want to have some specific overrides on each machine that you 
 |   git   | `~/.config/local_override/git/.gitconfig`  |
 |  nvim   | `~/.config/local_override/nvim/init.lua`   |
 |  tmux   | `~/.config/local_override/tmux/.tmux.conf` |
+| ghostty | `~/.config/local_override/ghostty/config`  |
 
