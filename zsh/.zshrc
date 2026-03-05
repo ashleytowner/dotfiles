@@ -193,3 +193,6 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 # opencode
 export PATH=/home/ashley/.opencode/bin:$PATH
+
+# bun completions
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
