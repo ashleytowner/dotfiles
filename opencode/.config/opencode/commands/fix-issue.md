@@ -1,5 +1,5 @@
 ---
-description: Make a plan to fix a github <issue>
+description: <issue_number> — Make a plan to fix a github issue
 agent: plan
 ---
 
