@@ -71,6 +71,7 @@ _fzf_compgen_dir() {
 
 #{{{ *aliases* 
 alias nv="nvim"
+alias oc="opencode"
 alias run="scripts"
 
 alias ls="ls -G --color"
