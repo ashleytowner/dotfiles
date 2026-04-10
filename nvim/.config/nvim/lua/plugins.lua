@@ -30,7 +30,7 @@ local plugins = {
 					vimgrep_arguments = {
 						'rg',
 						'--hidden',
-						'--vimgrep'
+						'--vimgrep',
 					},
 					prompt_prefix = '> ',
 					selection_caret = '> ',
@@ -76,8 +76,8 @@ local plugins = {
 					buffer_previewer_maker = require('telescope.previewers').buffer_previewer_maker,
 					mappings = {
 						i = {
-							["<C-q>"] = require('telescope.actions').smart_send_to_qflist
-						}
+							['<C-q>'] = require('telescope.actions').smart_send_to_qflist,
+						},
 					},
 				},
 				extensions = {
@@ -100,7 +100,11 @@ local plugins = {
 					},
 					buffers = {},
 					live_grep = {
-						file_ignore_patterns = { 'node_modules', '.git', '.venv' }
+						file_ignore_patterns = {
+							'node_modules',
+							'.git',
+							'.venv',
+						},
 					},
 					lsp_references = {},
 					lsp_definitions = {},
@@ -146,7 +150,7 @@ local plugins = {
 					find_command = {
 						'rg',
 						'-uuu',
-						'--files'
+						'--files',
 					},
 				})
 			end, { noremap = true, desc = 'Telescope find files' })
@@ -327,56 +331,56 @@ local plugins = {
 	{
 		'lewis6991/gitsigns.nvim',
 		config = function()
-		local gs = require('gitsigns');
-		gs.setup {
-			signs = {
-				add          = { text = '┃' },
-				change       = { text = '┃' },
-				delete       = { text = '_' },
-				topdelete    = { text = '‾' },
-				changedelete = { text = '~' },
-				untracked    = { text = '┆' },
-			},
-			signs_staged = {
-				add          = { text = '┃' },
-				change       = { text = '┃' },
-				delete       = { text = '_' },
-				topdelete    = { text = '‾' },
-				changedelete = { text = '~' },
-				untracked    = { text = '┆' },
-			},
-			signs_staged_enable = true,
-			signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
-			numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
-			linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
-			word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
-			watch_gitdir = {
-				follow_files = true
-			},
-			auto_attach = true,
-			attach_to_untracked = false,
-			current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-			current_line_blame_opts = {
-				virt_text = true,
-				virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-				delay = 1000,
-				ignore_whitespace = false,
-				virt_text_priority = 100,
-			},
-			current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
-			sign_priority = 6,
-			update_debounce = 100,
-			status_formatter = nil, -- Use default
-			max_file_length = 40000, -- Disable if file is longer than this (in lines)
-			preview_config = {
-				-- Options passed to nvim_open_win
-				border = 'single',
-				style = 'minimal',
-				relative = 'cursor',
-				row = 0,
-				col = 1
-			},
-		}
+			local gs = require('gitsigns')
+			gs.setup({
+				signs = {
+					add = { text = '┃' },
+					change = { text = '┃' },
+					delete = { text = '_' },
+					topdelete = { text = '‾' },
+					changedelete = { text = '~' },
+					untracked = { text = '┆' },
+				},
+				signs_staged = {
+					add = { text = '┃' },
+					change = { text = '┃' },
+					delete = { text = '_' },
+					topdelete = { text = '‾' },
+					changedelete = { text = '~' },
+					untracked = { text = '┆' },
+				},
+				signs_staged_enable = true,
+				signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
+				numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
+				linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
+				word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
+				watch_gitdir = {
+					follow_files = true,
+				},
+				auto_attach = true,
+				attach_to_untracked = false,
+				current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+				current_line_blame_opts = {
+					virt_text = true,
+					virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+					delay = 1000,
+					ignore_whitespace = false,
+					virt_text_priority = 100,
+				},
+				current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
+				sign_priority = 6,
+				update_debounce = 100,
+				status_formatter = nil, -- Use default
+				max_file_length = 40000, -- Disable if file is longer than this (in lines)
+				preview_config = {
+					-- Options passed to nvim_open_win
+					border = 'single',
+					style = 'minimal',
+					relative = 'cursor',
+					row = 0,
+					col = 1,
+				},
+			})
 			vim.keymap.set(
 				'n',
 				'gsh',
@@ -398,18 +402,12 @@ local plugins = {
 				gs.undo_stage_hunk,
 				{ desc = 'GitSigns undo stage hunk' }
 			)
-			vim.keymap.set(
-				'n',
-				']h',
-				function() gs.nav_hunk('next') end,
-				{ desc = 'GitSigns next hunk' }
-			)
-			vim.keymap.set(
-				'n',
-				'[h',
-				function() gs.nav_hunk('prev') end,
-				{ desc = 'GitSigns prev hunk' }
-			)
+			vim.keymap.set('n', ']h', function()
+				gs.nav_hunk('next')
+			end, { desc = 'GitSigns next hunk' })
+			vim.keymap.set('n', '[h', function()
+				gs.nav_hunk('prev')
+			end, { desc = 'GitSigns prev hunk' })
 		end,
 		dependencies = {
 			'nvim-lua/plenary.nvim',
@@ -488,11 +486,11 @@ local plugins = {
 					silent = true,
 					expr = true,
 					script = true,
-					desc = "Copilot dummy map"
+					desc = 'Copilot dummy map',
 				}
 			)
 		end,
-		enabled = false
+		enabled = false,
 	},
 	{
 		'Exafunction/codeium.vim',
@@ -536,6 +534,64 @@ local plugins = {
 			)
 		end,
 	},
+	{
+		'carlos-algms/agentic.nvim',
+		opts = {
+			-- Any ACP-compatible provider works. Built-in: "claude-agent-acp" | "gemini-acp" | "codex-acp" | "opencode-acp" | "cursor-acp" | "copilot-acp" | "auggie-acp" | "mistral-vibe-acp" | "cline-acp" | "goose-acp"
+			provider = 'opencode-acp',
+		},
+		keys = {
+			{
+				'<C-\\>',
+				function()
+					require('agentic').toggle()
+				end,
+				mode = { 'n', 'v', 'i' },
+				desc = 'Toggle Agentic Chat',
+			},
+			{
+				"<C-'>",
+				function()
+					require('agentic').add_selection_or_file_to_context()
+				end,
+				mode = { 'n', 'v' },
+				desc = 'Add file or selection to Agentic to Context',
+			},
+			{
+				'<C-,>',
+				function()
+					require('agentic').new_session()
+				end,
+				mode = { 'n', 'v', 'i' },
+				desc = 'New Agentic Session',
+			},
+			{
+				'<A-i>r', -- ai Restore
+				function()
+					require('agentic').restore_session()
+				end,
+				desc = 'Agentic Restore session',
+				silent = true,
+				mode = { 'n', 'v', 'i' },
+			},
+			{
+				'<leader>ad', -- ai Diagnostics
+				function()
+					require('agentic').add_current_line_diagnostics()
+				end,
+				desc = 'Add current line diagnostic to Agentic',
+				mode = { 'n' },
+			},
+			{
+				'<leader>aD', -- ai all Diagnostics
+				function()
+					require('agentic').add_buffer_diagnostics()
+				end,
+				desc = 'Add all buffer diagnostics to Agentic',
+				mode = { 'n' },
+			},
+		},
+	},
 	-- LSP, Completion, Debugging & Formatting
 	{
 		'mason-org/mason.nvim',
@@ -558,7 +614,7 @@ local plugins = {
 			{ 'theHamsta/nvim-dap-virtual-text' },
 			{
 				'rcarriga/nvim-dap-ui',
-				dependencies = { 'nvim-neotest/nvim-nio' }
+				dependencies = { 'nvim-neotest/nvim-nio' },
 			},
 		},
 		config = function()
@@ -587,13 +643,11 @@ local plugins = {
 			end, { desc = 'Debugger: toggle breakpoint' })
 
 			-- listeners
-			require('dap').listeners.after.event_initialized['dapui'] = function(
-			)
+			require('dap').listeners.after.event_initialized['dapui'] = function()
 				require('dapui').open()
 			end
 
-			require('dap').listeners.before.event_terminated['dapui'] = function(
-			)
+			require('dap').listeners.before.event_terminated['dapui'] = function()
 				require('dapui').close()
 			end
 
@@ -601,8 +655,7 @@ local plugins = {
 				require('dapui').close()
 			end
 
-			require('dap').listeners.after.event_initialized['keymaps'] = function(
-			)
+			require('dap').listeners.after.event_initialized['keymaps'] = function()
 				vim.o.mouse = 'nv'
 				vim.keymap.set('n', '<F3>', function()
 					require('dap').step_over()
@@ -618,8 +671,7 @@ local plugins = {
 				end, { desc = 'Debugger: terminate' })
 			end
 
-			require('dap').listeners.before.event_terminated['keymaps'] = function(
-			)
+			require('dap').listeners.before.event_terminated['keymaps'] = function()
 				vim.o.mouse = ''
 			end
 
@@ -870,7 +922,7 @@ local plugins = {
 		branch = 'main',
 		build = ':TSUpdate',
 		config = function()
-						-- Can call setup in here
+			-- Can call setup in here
 		end,
 	},
 	-- Colours
