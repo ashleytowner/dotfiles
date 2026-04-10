@@ -178,6 +178,8 @@ fi
 source <(fzf --zsh)
  # }}}
 
+# {{{ *script setups*
+
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -185,8 +187,6 @@ export NVM_DIR="$HOME/.config/nvm"
 if [[ "$TERM" == "xterm-kitty" ]]; then
   alias ssh='kitty +kitten ssh'
 fi
-
-# vim: foldmethod=marker foldlevel=99
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -196,4 +196,8 @@ export SDKMAN_DIR="$HOME/.sdkman"
 export PATH=/home/ashley/.opencode/bin:$PATH
 
 # bun completions
-[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# }}}
+
+# vim: foldmethod=marker foldlevel=99
