@@ -1,4 +1,3 @@
-local ts_utils = require('nvim-treesitter.ts_utils')
 local ts = require('util').TS
 
 local function toggle_check()
@@ -12,7 +11,8 @@ local function toggle_check()
 			or node:type() == 'task_list_marker_checked'
 		then
 			local current_position = vim.api.nvim_win_get_cursor(0)
-			ts_utils.goto_node(node)
+			local start_row, start_col = node:start()
+			vim.api.nvim_win_set_cursor(0, { start_row + 1, start_col })
 			if node:type() == 'task_list_marker_checked' then
 				vim.cmd('norm lr ')
 			else

@@ -191,10 +191,29 @@ end
 
 local TS = {}
 
-local ts_utils = require('nvim-treesitter.ts_utils')
+local function get_node_at_cursor()
+	return vim.treesitter.get_node({ ignore_injections = false })
+end
+
+local function get_vim_range(node)
+	local start_row, start_col, end_row, end_col = vim.treesitter.get_node_range(
+		node
+	)
+	start_row = start_row + 1
+	start_col = start_col + 1
+	end_row = end_row + 1
+
+	if end_col == 0 then
+		end_row = end_row - 1
+		end_col = vim.fn.col({ end_row, '$' }) - 1
+		end_col = math.max(end_col, 1)
+	end
+
+	return start_row, start_col, end_row, end_col
+end
 
 function TS.get_node(main)
-	local node = ts_utils.get_node_at_cursor()
+	local node = get_node_at_cursor()
 
 	if node == nil then
 		error('Could not find node')
@@ -203,12 +222,10 @@ function TS.get_node(main)
 	if main then
 		local start_row = node:start()
 		local parent = node:parent()
-		local root = ts_utils.get_root_for_node(node)
 
 		while
 			parent ~= nil
 			and parent:start() == start_row
-			and parent ~= root
 		do
 			node = parent
 			parent = node:parent()
@@ -222,8 +239,17 @@ function TS.select_node(node)
 	if node == nil then
 		return
 	end
-	local bufnr = vim.fn.bufnr()
-	ts_utils.update_selection(bufnr, node)
+
+	local start_row, start_col, end_row, end_col = get_vim_range(node)
+	local mode = vim.api.nvim_get_mode()
+
+	if mode.mode ~= 'v' then
+		vim.api.nvim_cmd({ cmd = 'normal', bang = true, args = { 'v' } }, {})
+	end
+
+	vim.api.nvim_win_set_cursor(0, { start_row, start_col - 1 })
+	vim.cmd('normal! o')
+	vim.api.nvim_win_set_cursor(0, { end_row, end_col - 1 })
 end
 
 local function is_in_table(table, value)
@@ -236,7 +262,7 @@ local function is_in_table(table, value)
 end
 
 function TS.get_parent_node_of_type(types)
-	local node = ts_utils.get_node_at_cursor()
+	local node = get_node_at_cursor()
 
 	if node == nil then
 		error('Node is nil')
@@ -273,4 +299,3 @@ end, { noremap = true, silent = true })
 M.TS = TS
 
 return M
-

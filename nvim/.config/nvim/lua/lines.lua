@@ -324,9 +324,6 @@ function StatusLine()
 	return buffer_info()
 		.. (not vim.wo.diff and git_info() or '')
 		.. '%='
-		.. color_when_focused('FiletypeStatusLine')
-		.. '%30{nvim_treesitter#statusline()} '
-		.. '%='
 		.. codeium_info()
 		.. position_info()
 end

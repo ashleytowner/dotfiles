@@ -4,7 +4,7 @@ require('plugins')
 Util = require('util')
 require('lines')
 
-vim.cmd([[colorscheme catppuccin]])
+vim.cmd([[colorscheme catppuccin-macchiato]])
 
 -- highlight text on yank
 local yank_highlight_group =
@@ -60,7 +60,7 @@ vim.wo.colorcolumn = '80'
 vim.wo.list = true
 vim.wo.wrap = true
 vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 vim.wo.signcolumn = 'auto:3-9'
 vim.go.statusline = '%!v:lua.StatusLine()'
 vim.go.tabline = '%!v:lua.TabLine()'
