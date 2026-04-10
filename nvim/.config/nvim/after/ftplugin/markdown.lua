@@ -1,26 +1,21 @@
 local ts = require('util').TS
 
 local function toggle_check()
-	local list_item = ts.get_parent_node_of_type({ 'list_item' })
-	if list_item == nil then
+	local row = vim.api.nvim_win_get_cursor(0)[1]
+	local line = vim.api.nvim_buf_get_lines(0, row - 1, row, false)[1]
+	if line == nil then
 		return false
 	end
-	for node in list_item:iter_children() do
-		if
-			node:type() == 'task_list_marker_unchecked'
-			or node:type() == 'task_list_marker_checked'
-		then
-			local current_position = vim.api.nvim_win_get_cursor(0)
-			local start_row, start_col = node:start()
-			vim.api.nvim_win_set_cursor(0, { start_row + 1, start_col })
-			if node:type() == 'task_list_marker_checked' then
-				vim.cmd('norm lr ')
-			else
-				vim.cmd('norm lrx')
-			end
-			vim.api.nvim_win_set_cursor(0, current_position)
-		end
+
+	local start_col, _, marker = line:find('%[([ xX])%]')
+	if start_col == nil then
+		return false
 	end
+
+	local replacement = marker:lower() == 'x' and ' ' or 'x'
+	vim.api.nvim_buf_set_text(0, row - 1, start_col, row - 1, start_col + 1, {
+		replacement,
+	})
 	return true
 end
 
