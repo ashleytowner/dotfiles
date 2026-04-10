@@ -3,3 +3,4 @@ ripgrep
 nvim
 tmux
 jq
+tree-sitter-cli
