@@ -201,3 +201,6 @@ export PATH=/home/ashley/.opencode/bin:$PATH
 # }}}
 
 # vim: foldmethod=marker foldlevel=99
+
+# Turso
+export PATH="$PATH:/home/ashley/.turso"

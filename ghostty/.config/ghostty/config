@@ -3,3 +3,20 @@ window-height=1000
 window-width=1000
 keybind = shift+enter=text:\x1b\r
 config-file = ?~/.config/local_override/ghostty/config
+font-thicken = true
+
+# Terminfo & Clipboard permissions
+
+term = "xterm-ghostty"
+clipboard-write = allow
+clipboard-read = allow
+clipboard-paste-protection = false
+
+# Keybindings & Meta Key Forwarding
+
+macos-option-as-alt = true
+keybind = super+ctrl+f=toggle_fullscreen
+
+# Auto-launch into tmux
+
+command = tmux new-session -A -s main
