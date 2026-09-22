@@ -1,21 +1,88 @@
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-	vim.fn.system({
-		'git',
-		'clone',
-		'--filter=blob:none',
-		'https://github.com/folke/lazy.nvim.git',
-		'--branch=stable', -- latest stable release
-		lazypath,
-	})
-end
-vim.opt.rtp:prepend(lazypath)
+local pack_changed_group =
+	vim.api.nvim_create_augroup('PackChangedHooks', { clear = true })
 
-local plugins = {
-	-- Base
+vim.api.nvim_create_autocmd('PackChanged', {
+	group = pack_changed_group,
+	callback = function(event)
+		local name = event.data.spec.name
+		local kind = event.data.kind
+
+		if
+			name == 'nvim-treesitter'
+			and (kind == 'install' or kind == 'update')
+		then
+			if not event.data.active then
+				vim.cmd.packadd('nvim-treesitter')
+			end
+
+			vim.cmd.TSUpdate()
+		end
+	end,
+})
+
+vim.pack.add({
+	'https://github.com/nvim-lua/plenary.nvim',
+	'https://github.com/nvim-telescope/telescope.nvim',
+	'https://github.com/gbrlsnchs/telescope-lsp-handlers.nvim',
+	'https://github.com/nvim-telescope/telescope-ui-select.nvim',
+	'https://github.com/tpope/vim-surround',
+	'https://github.com/tpope/vim-repeat',
+	'https://github.com/numToStr/Comment.nvim',
+	'https://github.com/bkad/CamelCaseMotion',
+	'https://github.com/smoka7/hop.nvim',
+	'https://github.com/lewis6991/gitsigns.nvim',
+	'https://github.com/tpope/vim-fugitive',
+	'https://github.com/stevearc/oil.nvim',
+	'https://github.com/nvim-tree/nvim-web-devicons',
+	'https://github.com/mason-org/mason.nvim',
+	'https://github.com/jay-babu/mason-nvim-dap.nvim',
+	'https://github.com/mfussenegger/nvim-dap',
+	'https://github.com/theHamsta/nvim-dap-virtual-text',
+	'https://github.com/rcarriga/nvim-dap-ui',
+	'https://github.com/nvim-neotest/nvim-nio',
+	'https://github.com/neovim/nvim-lspconfig',
+	'https://github.com/folke/neodev.nvim',
+	'https://github.com/mason-org/mason-lspconfig.nvim',
+	'https://github.com/folke/trouble.nvim',
+	'https://github.com/nvimtools/none-ls.nvim',
+	'https://github.com/jay-babu/mason-null-ls.nvim',
+	'https://github.com/mhartington/formatter.nvim',
+	'https://github.com/hrsh7th/nvim-cmp',
+	'https://github.com/hrsh7th/vim-vsnip',
+	'https://github.com/hrsh7th/cmp-vsnip',
+	'https://github.com/rafamadriz/friendly-snippets',
+	'https://github.com/hrsh7th/cmp-buffer',
+	'https://github.com/hrsh7th/cmp-calc',
+	'https://github.com/hrsh7th/cmp-cmdline',
+	'https://github.com/hrsh7th/cmp-nvim-lsp',
+	'https://github.com/hrsh7th/cmp-path',
+	'https://github.com/onsails/lspkind-nvim',
+	'https://github.com/hrsh7th/cmp-emoji',
+	'https://github.com/habamax/vim-godot',
 	{
-		'nvim-lua/plenary.nvim',
+		src = 'https://github.com/nvim-treesitter/nvim-treesitter',
+		version = 'main',
 	},
+	{
+		src = 'https://github.com/catppuccin/nvim',
+		name = 'catppuccin',
+	},
+	'https://github.com/dstein64/vim-startuptime',
+}, { confirm = false })
+
+-- Optional plugins distributed with Neovim.
+vim.cmd.packadd('nvim.difftool')
+vim.cmd.packadd('nvim.tohtml')
+vim.cmd.packadd('nvim.undotree')
+
+vim.keymap.set('n', '<leader>u', '<cmd>Undotree<cr>', {
+	desc = 'Toggle undo tree',
+})
+
+-- Plugin setup is kept separate from installation because vim.pack does not
+-- provide configuration callbacks.
+local plugin_configs = {
+	-- Base
 	{
 		'nvim-telescope/telescope.nvim',
 		config = function()
@@ -196,17 +263,6 @@ local plugins = {
 				})
 			end, { noremap = true, desc = 'Telescope TODOs' })
 		end,
-		dependencies = {
-			{
-				'gbrlsnchs/telescope-lsp-handlers.nvim',
-			},
-			{
-				'nvim-lua/plenary.nvim',
-			},
-			{
-				'nvim-telescope/telescope-ui-select.nvim',
-			},
-		},
 	},
 	-- Motions & Objects
 	{
@@ -239,9 +295,6 @@ local plugins = {
 				desc = 'Start surround operation, accepts a motion',
 			})
 		end,
-		dependencies = {
-			'tpope/vim-repeat',
-		},
 	},
 	{
 		'numToStr/Comment.nvim',
@@ -409,9 +462,6 @@ local plugins = {
 				gs.nav_hunk('prev')
 			end, { desc = 'GitSigns prev hunk' })
 		end,
-		dependencies = {
-			'nvim-lua/plenary.nvim',
-		},
 	},
 	{
 		'tpope/vim-fugitive',
@@ -423,7 +473,6 @@ local plugins = {
 				{ noremap = true, desc = 'Git diff split' }
 			)
 		end,
-		cmd = 'Git',
 	},
 	-- File Management
 	{
@@ -439,98 +488,6 @@ local plugins = {
 				'-',
 				require('oil').open,
 				{ desc = 'Open parent directory' }
-			)
-		end,
-		dependencies = {
-			'nvim-tree/nvim-web-devicons',
-		},
-	},
-	{
-		'mbbill/undotree',
-		config = function()
-			vim.keymap.set(
-				'n',
-				'<leader>u',
-				'<CMD>UndotreeToggle<CR>',
-				{ desc = 'Toggle undotree' }
-			)
-		end,
-	},
-	-- AI
-	{
-		'github/copilot.vim',
-		config = function()
-			vim.g.copilot_no_tab_map = true
-			vim.g.ai = 'copilot'
-
-			vim.keymap.set(
-				'i',
-				'<C-g>n',
-				'<Plug>(copilot-next)',
-				{ noremap = true }
-			)
-
-			vim.keymap.set(
-				'i',
-				'<C-g>p',
-				'<Plug>(copilot-prev)',
-				{ noremap = true }
-			)
-
-			vim.keymap.set(
-				'i',
-				'<Plug>(vimrc:copilot-dummy-map)',
-				'copilot#Accept("")',
-				{
-					noremap = true,
-					silent = true,
-					expr = true,
-					script = true,
-					desc = 'Copilot dummy map',
-				}
-			)
-		end,
-		enabled = false,
-	},
-	{
-		'Exafunction/codeium.vim',
-		enabled = false,
-		cond = function()
-			return os.getenv('NO_AI') ~= 'true'
-		end,
-		config = function()
-			vim.g.codeium_disable_bindings = true
-			vim.g.ai = 'codeium'
-
-			vim.keymap.set(
-				'i',
-				'<C-g>n',
-				'<CMD>call codeium#CycleCompletions(1)<CR>',
-				{ noremap = true, desc = 'Cycle to next codeium completion' }
-			)
-
-			vim.keymap.set(
-				'i',
-				'<C-g>p',
-				'<CMD>call codeium#CycleCompletions(-1)<CR>',
-				{
-					noremap = true,
-					desc = 'Cycle to previous codeium completion',
-				}
-			)
-
-			vim.keymap.set(
-				'i',
-				'<C-g><CR>',
-				'<CMD>call codeium#Accept()<CR>',
-				{ noremap = true, desc = 'Accept codeium completion' }
-			)
-
-			vim.keymap.set(
-				'i',
-				'<C-g><C-e>',
-				'<CMD>call codeium#Clear()<CR>',
-				{ noremap = true, desc = 'Clear codeium completion' }
 			)
 		end,
 	},
@@ -550,15 +507,6 @@ local plugins = {
 	},
 	{
 		'jay-babu/mason-nvim-dap.nvim',
-		dependencies = {
-			{ 'mfussenegger/nvim-dap' },
-			{ 'mason-org/mason.nvim' },
-			{ 'theHamsta/nvim-dap-virtual-text' },
-			{
-				'rcarriga/nvim-dap-ui',
-				dependencies = { 'nvim-neotest/nvim-nio' },
-			},
-		},
 		config = function()
 			-- setup
 			require('mason-nvim-dap').setup({
@@ -623,27 +571,13 @@ local plugins = {
 		end,
 	},
 	{
-		'mfussenegger/nvim-dap',
-	},
-	{
 		'neovim/nvim-lspconfig',
 		config = function()
 			require('lsp')
 		end,
-		dependencies = {
-			{
-				'folke/neodev.nvim',
-				'mason-org/mason-lspconfig.nvim',
-			},
-		},
-	},
-	{
-		'folke/trouble.nvim',
-		dependencies = { 'nvim-tree/nvim-web-devicons' },
 	},
 	{
 		'nvimtools/none-ls.nvim',
-		dependencies = { 'mason.nvim', 'jay-babu/mason-null-ls.nvim' },
 		config = function()
 			local mason_null_ls = require('mason-null-ls')
 			local null_ls = require('null-ls')
@@ -804,74 +738,28 @@ local plugins = {
 					{ name = 'buffer' },
 				},
 			})
+
+			vim.cmd([[
+				imap <expr> <C-l> vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)' : '<C-l>'
+				smap <expr> <C-l> vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)' : '<C-l>'
+				imap <expr> <C-h> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-h>'
+				smap <expr> <C-h> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-h>'
+			]])
 		end,
-		dependencies = {
-			{
-				'hrsh7th/vim-vsnip',
-				config = function()
-					vim.cmd([[
-						imap <expr> <C-l> vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)' : '<C-l>'
-						smap <expr> <C-l> vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)' : '<C-l>'
-						imap <expr> <C-h> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-h>'
-						smap <expr> <C-h> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-h>'
-					]])
-				end,
-			},
-			{
-				'hrsh7th/cmp-vsnip',
-			},
-			{
-				'rafamadriz/friendly-snippets',
-			},
-			{
-				'hrsh7th/cmp-buffer',
-			},
-			{
-				'hrsh7th/cmp-calc',
-			},
-			{
-				'hrsh7th/cmp-cmdline',
-			},
-			{
-				'hrsh7th/cmp-nvim-lsp',
-			},
-			{
-				'hrsh7th/cmp-path',
-			},
-			{
-				'onsails/lspkind-nvim',
-			},
-			{
-				'hrsh7th/cmp-emoji',
-			},
-		},
 	},
 	{
 		'habamax/vim-godot',
 		config = function()
-			require('lspconfig').gdscript.setup({
+			vim.lsp.config('gdscript', {
 				capabilities = require('cmp_nvim_lsp').default_capabilities(
 					vim.lsp.protocol.make_client_capabilities()
 				),
 			})
 		end,
-		ft = 'gdscript',
-	},
-	-- Syntax Highlighting
-	{
-		'nvim-treesitter/nvim-treesitter',
-		lazy = 'false',
-		branch = 'main',
-		build = ':TSUpdate',
-		config = function()
-			-- Can call setup in here
-		end,
 	},
 	-- Colours
 	{
 		'catppuccin/nvim',
-		name = 'catppuccin',
-		lazy = true,
 		config = function()
 			require('catppuccin').setup({
 				background = {
@@ -895,11 +783,8 @@ local plugins = {
 			})
 		end,
 	},
-	-- Util
-	{
-		'dstein64/vim-startuptime',
-		cmd = 'StartupTime',
-	},
 }
 
-require('lazy').setup(plugins)
+for _, plugin in ipairs(plugin_configs) do
+	plugin.config()
+end
