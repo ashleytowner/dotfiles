@@ -303,7 +303,7 @@ local plugins = {
 		end,
 	},
 	{
-		'phaazon/hop.nvim',
+		'smoka7/hop.nvim',
 		config = function()
 			require('hop').setup({
 				reverse_distribution = true,
