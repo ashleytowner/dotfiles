@@ -1,10 +1,8 @@
 bash
-beets
 ctags
 fzf
 git
 ghostty
-kitty
 nvim
 opencode
 tmux
