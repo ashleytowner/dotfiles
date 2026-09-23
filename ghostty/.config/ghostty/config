@@ -20,3 +20,4 @@ keybind = super+ctrl+f=toggle_fullscreen
 # Auto-launch into tmux
 
 command = $SHELL -lc 'exec tmux new-session -A -s main'
+confirm-close-surface = false
