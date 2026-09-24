@@ -112,26 +112,24 @@ vim.keymap.set(
 )
 
 -- Diff commands
-if vim.wo.diff then
-	vim.keymap.set(
-		{'n', 'v'},
-		'<leader>1',
-		':diffget 1<CR>',
-		{ noremap = true, desc = 'Get diff from left' }
-	)
-	vim.keymap.set(
-		{'n', 'v'},
-		'<leader>2',
-		':diffget 2<CR>',
-		{ noremap = true, desc = 'Get diff from middle' }
-	)
-	vim.keymap.set(
-		{'n', 'v'},
-		'<leader>3',
-		':diffget 3<CR>',
-		{ noremap = true, desc = 'Get diff from right' }
-	)
-end
+vim.keymap.set(
+	{ 'n', 'v' },
+	'<leader>1',
+	':diffget 1<CR>',
+	{ noremap = true, desc = 'Get diff from left' }
+)
+vim.keymap.set(
+	{ 'n', 'v' },
+	'<leader>2',
+	':diffget 2<CR>',
+	{ noremap = true, desc = 'Get diff from middle' }
+)
+vim.keymap.set(
+	{ 'n', 'v' },
+	'<leader>3',
+	':diffget 3<CR>',
+	{ noremap = true, desc = 'Get diff from right' }
+)
 
 vim.keymap.set('', '<leader>/', function()
 	local bufs = require('util').get_buffers()
