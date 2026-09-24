@@ -27,7 +27,6 @@ end, { noremap = true, buf = 0, silent = true })
 
 local function add_header(level)
 	local current_position = vim.api.nvim_win_get_cursor(0)
-	print(vim.inspect(current_position))
 	local hashes = ''
 	for _ = level, 1, -1 do
 		hashes = hashes .. '#'
