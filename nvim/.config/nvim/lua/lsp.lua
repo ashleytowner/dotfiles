@@ -175,17 +175,10 @@ table.insert(runtime_path, 'lua/?/init.lua')
 
 require('neodev').setup()
 local masonLspOk, masonLsp = pcall(require, 'mason-lspconfig')
-local lspConfigOk, lspConfig = pcall(require, 'lspconfig')
 
-if not (masonLspOk or lspConfigOk) then
+if not (masonLspOk) then
 	return
 end
-
--- vim.lsp.config('*', {
--- 	on_attach = function()
--- 		set_keymaps()
--- 	end
--- });
 
 vim.api.nvim_create_autocmd('LspAttach', {
 	callback = function()
@@ -209,14 +202,6 @@ vim.lsp.config('lua_ls', {
 	}
 })
 
-vim.lsp.config('ts_ls', {
-	on_attach = function(client)
-		client.server_capabilities.documentFormattingProvider = false
-	end
-});
-
-
-
 masonLsp.setup({
 	ensure_installed = {
 		'bashls',
@@ -225,7 +210,7 @@ masonLsp.setup({
 		'html',
 		'lua_ls',
 		'pyright',
-		'ts_ls',
+		'tsc',
 		'vimls',
 	},
 })
