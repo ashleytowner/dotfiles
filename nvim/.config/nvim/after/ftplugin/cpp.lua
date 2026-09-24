@@ -1,1 +1,1 @@
-vim.o.cindent = true
+vim.bo.cindent = true

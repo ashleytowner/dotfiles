@@ -54,7 +54,6 @@ vim.o.hlsearch = false
 vim.o.showbreak='↪\\'
 vim.o.listchars = 'tab:▎ ,trail:·,nbsp:␣,extends:⟩,precedes:⟨'
 vim.o.number = true
-vim.o.pyxversion = 3
 vim.o.relativenumber = true
 vim.o.shiftwidth = 2
 vim.o.smartindent = true
@@ -87,7 +86,6 @@ vim.g.markdown_fenced_languages = {
 	'js=javascript',
 }
 
-vim.cmd('filetype on')
 vim.cmd('filetype plugin on')
 vim.cmd('syntax enable')
 
