@@ -510,7 +510,7 @@ local plugin_configs = {
 		config = function()
 			-- setup
 			require('mason-nvim-dap').setup({
-				ensure_installed = { 'node2' },
+				ensure_installed = { 'js' },
 				automatic_installation = false,
 				handlers = {
 					function(config)
@@ -521,6 +521,43 @@ local plugin_configs = {
 
 			require('nvim-dap-virtual-text').setup({})
 			require('dapui').setup()
+
+			local dap = require('dap')
+			dap.adapters['pwa-node'] = {
+				type = 'server',
+				host = 'localhost',
+				port = '${port}',
+				executable = {
+					command = 'js-debug-adapter',
+					args = { '${port}' },
+				},
+			}
+
+			local js_configurations = {
+				{
+					type = 'pwa-node',
+					request = 'launch',
+					name = 'Launch current file',
+					program = '${file}',
+					cwd = '${workspaceFolder}',
+				},
+				{
+					type = 'pwa-node',
+					request = 'attach',
+					name = 'Attach to process',
+					processId = require('dap.utils').pick_process,
+					cwd = '${workspaceFolder}',
+				},
+			}
+
+			for _, language in ipairs({
+				'javascript',
+				'javascriptreact',
+				'typescript',
+				'typescriptreact',
+			}) do
+				dap.configurations[language] = js_configurations
+			end
 
 			-- keymappings
 
