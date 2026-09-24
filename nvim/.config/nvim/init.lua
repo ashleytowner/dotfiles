@@ -34,7 +34,7 @@ function FoldText()
 	return ' '
 		.. vim.fn.getline(vim.v.foldstart)
 		.. ' ('
-		.. (vim.v.foldend - vim.v.foldstart)
+		.. (vim.v.foldend - vim.v.foldstart + 1)
 		.. ' lines)'
 end
 
