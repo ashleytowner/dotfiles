@@ -23,7 +23,7 @@ vim.keymap.set({ 'n' }, '<leader>x', function()
 	if not toggle_check() then
 		vim.cmd('norm ' .. vim.g.mapleader .. 'x')
 	end
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })
 
 local function add_header(level)
 	local current_position = vim.api.nvim_win_get_cursor(0)
@@ -85,7 +85,7 @@ vim.keymap.set({ 'n' }, '<leader>o', function()
 		vim.cmd('norm 0$')
 	end
 	vim.cmd('startinsert!')
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })
 
 vim.keymap.set({ 'o', 'x' }, 'ah', function()
 	local header = get_header()
@@ -93,7 +93,7 @@ vim.keymap.set({ 'o', 'x' }, 'ah', function()
 		return
 	end
 	ts.select_node(header)
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })
 
 vim.keymap.set({ 'o', 'x' }, 'ih', function()
 	local header = get_header()
@@ -108,28 +108,28 @@ vim.keymap.set({ 'o', 'x' }, 'ih', function()
 		end
 	end
 	ts.select_node(inline)
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })
 
 vim.keymap.set({ 'n' }, '<leader>h1', function()
 	add_header(1)
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })
 
 vim.keymap.set({ 'n' }, '<leader>h2', function()
 	add_header(2)
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })
 
 vim.keymap.set({ 'n' }, '<leader>h3', function()
 	add_header(3)
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })
 
 vim.keymap.set({ 'n' }, '<leader>h4', function()
 	add_header(4)
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })
 
 vim.keymap.set({ 'n' }, '<leader>h5', function()
 	add_header(5)
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })
 
 vim.keymap.set({ 'n' }, '<leader>h6', function()
 	add_header(6)
-end, { noremap = true, buffer = true, silent = true })
+end, { noremap = true, buf = 0, silent = true })

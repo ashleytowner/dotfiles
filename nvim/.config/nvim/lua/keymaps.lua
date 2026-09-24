@@ -136,7 +136,7 @@ vim.keymap.set('', '<leader>/', function()
 	local terminal_buffer = -1
 
 	for _, buf in ipairs(bufs) do
-		if vim.api.nvim_buf_get_option(buf.number, 'buftype') == 'terminal' then
+		if vim.bo[buf.number].buftype == 'terminal' then
 			terminal_buffer = buf.number
 			break
 		end

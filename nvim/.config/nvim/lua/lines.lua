@@ -315,7 +315,7 @@ end
 ---Get the status line for the current window
 function StatusLine()
 	local bufnum = vim.fn.winbufnr(vim.g.statusline_winid)
-	local buftype = vim.api.nvim_buf_get_option(bufnum, 'buftype')
+	local buftype = vim.bo[bufnum].buftype
 
 	if buftype == 'nofile' then
 		return ' %t%=%(%P%)'
@@ -344,5 +344,4 @@ function BufferLine()
 	end
 	return str
 end
-
 

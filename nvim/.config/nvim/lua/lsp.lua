@@ -1,25 +1,40 @@
 local tscpOk, tscp = pcall(require, 'telescope.builtin')
 
-local function set_keymaps()
-	vim.keymap.set({ 'n', 'i' }, '<C-k>', vim.lsp.buf.signature_help, {
+local ascii_border = {
+	{ '+', 'FloatBorder' },
+	{ '-', 'FloatBorder' },
+	{ '+', 'FloatBorder' },
+	{ '|', 'FloatBorder' },
+	{ '+', 'FloatBorder' },
+	{ '-', 'FloatBorder' },
+	{ '+', 'FloatBorder' },
+	{ '|', 'FloatBorder' },
+}
+
+local function set_keymaps(bufnr)
+	vim.keymap.set({ 'n', 'i' }, '<C-k>', function()
+		vim.lsp.buf.signature_help({ border = ascii_border })
+	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Signature help',
 	})
 
 	vim.keymap.set(
 		'n',
 		'K',
-		vim.lsp.buf.hover,
-		{ noremap = true, silent = true, buffer = true, desc = 'Hover' }
+		function()
+			vim.lsp.buf.hover({ border = ascii_border })
+		end,
+		{ noremap = true, silent = true, buf = bufnr, desc = 'Hover' }
 	)
 
 	vim.keymap.set(
 		'n',
 		'<leader>.',
 		vim.lsp.buf.code_action,
-		{ noremap = true, silent = true, buffer = true, desc = 'Code action' }
+		{ noremap = true, silent = true, buf = bufnr, desc = 'Code action' }
 	)
 
 	vim.keymap.set('n', ']t', function()
@@ -31,21 +46,25 @@ local function set_keymaps()
 	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Go to type definition',
 	})
 
-	vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {
+	vim.keymap.set('n', '[d', function()
+		vim.diagnostic.jump({ count = -1, float = true })
+	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Go to previous diagnostic',
 	})
 
-	vim.keymap.set('n', ']d', vim.diagnostic.goto_next, {
+	vim.keymap.set('n', ']d', function()
+		vim.diagnostic.jump({ count = 1, float = true })
+	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Go to next diagnostic',
 	})
 
@@ -60,7 +79,7 @@ local function set_keymaps()
 	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Show diagnostics',
 	})
 
@@ -73,14 +92,14 @@ local function set_keymaps()
 	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Show diagnostics',
 	})
 
 	vim.keymap.set('n', ']i', vim.lsp.buf.implementation, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Go to implementation',
 	})
 
@@ -93,12 +112,12 @@ local function set_keymaps()
 				['end'] = { line, 10000 },
 			},
 		})
-	end, { noremap = true, silent = true, buffer = true, desc = 'Format line' })
+	end, { noremap = true, silent = true, buf = bufnr, desc = 'Format line' })
 
 	vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Go to implementation',
 	})
 
@@ -106,13 +125,13 @@ local function set_keymaps()
 		'n',
 		'<leader>rn',
 		vim.lsp.buf.rename,
-		{ noremap = true, silent = true, buffer = true, desc = 'Rename' }
+		{ noremap = true, silent = true, buf = bufnr, desc = 'Rename' }
 	)
 
 	vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Go to declaration',
 	})
 
@@ -125,7 +144,7 @@ local function set_keymaps()
 	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Go to definition',
 	})
 
@@ -138,7 +157,7 @@ local function set_keymaps()
 	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Go to references',
 	})
 
@@ -151,7 +170,7 @@ local function set_keymaps()
 	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Document symbols',
 	})
 
@@ -164,7 +183,7 @@ local function set_keymaps()
 	end, {
 		noremap = true,
 		silent = true,
-		buffer = true,
+		buf = bufnr,
 		desc = 'Workspace symbols',
 	})
 end
@@ -181,8 +200,8 @@ if not (masonLspOk) then
 end
 
 vim.api.nvim_create_autocmd('LspAttach', {
-	callback = function()
-		set_keymaps()
+	callback = function(event)
+		set_keymaps(event.buf)
 	end
 })
 
@@ -220,46 +239,14 @@ masonLsp.setup({
 	},
 })
 
-local ascii_border = {
-	{ '+', 'FloatBorder' },
-	{ '-', 'FloatBorder' },
-	{ '+', 'FloatBorder' },
-	{ '|', 'FloatBorder' },
-	{ '+', 'FloatBorder' },
-	{ '-', 'FloatBorder' },
-	{ '+', 'FloatBorder' },
-	{ '|', 'FloatBorder' },
-}
-
-vim.diagnostic.config({ float = { border = 'rounded' } })
-vim.lsp.handlers['textDocument/hover'] = function(err, result, ctx, config)
-	config = vim.tbl_deep_extend('force', config or {}, { border = ascii_border })
-	return vim.lsp.handlers.hover(err, result, ctx, config)
-end
-
-vim.lsp.handlers['textDocument/signatureHelp'] = function(
-	err,
-	result,
-	ctx,
-	config
-)
-	config = vim.tbl_deep_extend('force', config or {}, { border = ascii_border })
-	return vim.lsp.handlers.signature_help(err, result, ctx, config)
-end
-
-vim.fn.sign_define(
-	'DiagnosticSignError',
-	{ text = '!', texthl = 'DiagnosticSignError' }
-)
-vim.fn.sign_define(
-	'DiagnosticSignWarn',
-	{ text = '?', texthl = 'DiagnosticSignWarn' }
-)
-vim.fn.sign_define(
-	'DiagnosticSignInformation',
-	{ text = 'i', texthl = 'DiagnosticSignInformation' }
-)
-vim.fn.sign_define(
-	'DiagnosticSignHint',
-	{ text = '~', texthl = 'DiagnosticSignHint' }
-)
+vim.diagnostic.config({
+	float = { border = 'rounded' },
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = '!',
+			[vim.diagnostic.severity.WARN] = '?',
+			[vim.diagnostic.severity.INFO] = 'i',
+			[vim.diagnostic.severity.HINT] = '~',
+		},
+	},
+})
