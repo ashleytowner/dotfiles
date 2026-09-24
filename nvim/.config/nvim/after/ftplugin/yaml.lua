@@ -1,27 +1,16 @@
 local function yaml_value(parameter)
-	local filename = vim.fn.expand('%');
-	vim.cmd('!yq \'' .. parameter .. '\' < ' .. filename)
+	local result = vim.system({ 'yq', parameter, vim.api.nvim_buf_get_name(0) }, {
+		text = true,
+	}):wait()
+
+	if result.code ~= 0 then
+		vim.notify(result.stderr, vim.log.levels.ERROR)
+		return
+	end
+
+	vim.api.nvim_echo({ { result.stdout } }, true, {})
 end
 
-local yaml_value_group = vim.api.nvim_create_augroup(
-	'YamlValueCommand',
-	{ clear = true }
-);
-
-vim.api.nvim_create_autocmd({'BufLeave'}, {
-	pattern = {'*.yaml', '*.yml'},
-	group = yaml_value_group,
-	callback = function()
-		pcall(vim.api.nvim_del_user_command, 'YamlValue');
-	end
-});
-
-vim.api.nvim_create_autocmd({'BufEnter'}, {
-	pattern = {'*.yaml', '*.yml'},
-	group = yaml_value_group,
-	callback = function()
-		pcall(vim.api.nvim_create_user_command, 'JsonValue', function(input)
-			yaml_value(input.args)
-		end, { nargs = 1 });
-	end
-});
+vim.api.nvim_buf_create_user_command(0, 'YamlValue', function(input)
+	yaml_value(input.args)
+end, { nargs = 1 })
