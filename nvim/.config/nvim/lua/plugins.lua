@@ -42,7 +42,6 @@ vim.pack.add({
 	'https://github.com/neovim/nvim-lspconfig',
 	'https://github.com/folke/lazydev.nvim',
 	'https://github.com/mason-org/mason-lspconfig.nvim',
-	'https://github.com/folke/trouble.nvim',
 	'https://github.com/nvimtools/none-ls.nvim',
 	'https://github.com/jay-babu/mason-null-ls.nvim',
 	'https://github.com/mhartington/formatter.nvim',
