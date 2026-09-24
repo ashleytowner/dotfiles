@@ -1,5 +1,12 @@
 vim.g.mapleader = ' '
 
+vim.filetype.add({
+	pattern = {
+		['.*/%.%a+rc'] = 'conf',
+		['.*/%.%a+ignore'] = 'conf',
+	},
+})
+
 require('plugins')
 Util = require('util')
 require('lines')
