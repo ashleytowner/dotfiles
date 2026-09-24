@@ -26,7 +26,6 @@ vim.pack.add({
 	'https://github.com/nvim-telescope/telescope-ui-select.nvim',
 	'https://github.com/tpope/vim-surround',
 	'https://github.com/tpope/vim-repeat',
-	'https://github.com/numToStr/Comment.nvim',
 	'https://github.com/bkad/CamelCaseMotion',
 	'https://github.com/smoka7/hop.nvim',
 	'https://github.com/lewis6991/gitsigns.nvim',
@@ -292,18 +291,6 @@ local plugin_configs = {
 				silent = true,
 				desc = 'Start surround operation, accepts a motion',
 			})
-		end,
-	},
-	{
-		'numToStr/Comment.nvim',
-		config = function()
-			local commentOk, comment = pcall(require, 'Comment')
-
-			if not commentOk then
-				print('Comment.nvim is not installed')
-			end
-
-			comment.setup()
 		end,
 	},
 	{
