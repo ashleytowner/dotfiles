@@ -188,11 +188,7 @@ local function set_keymaps(bufnr)
 	})
 end
 
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, 'lua/?.lua')
-table.insert(runtime_path, 'lua/?/init.lua')
-
-require('neodev').setup()
+require('lazydev').setup()
 local masonLspOk, masonLsp = pcall(require, 'mason-lspconfig')
 
 if not (masonLspOk) then
@@ -209,16 +205,10 @@ vim.lsp.config('lua_ls', {
 	settings = {
 		Lua = {
 			runtime = {
-				version = 'LuaJIT'
+				version = 'LuaJIT',
 			},
-			diagnostics = {
-				globals = {
-					'vim',
-					'require'
-				}
-			}
-		}
-	}
+		},
+	},
 })
 
 vim.lsp.config('gdscript', {

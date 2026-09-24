@@ -41,7 +41,7 @@ vim.pack.add({
 	'https://github.com/rcarriga/nvim-dap-ui',
 	'https://github.com/nvim-neotest/nvim-nio',
 	'https://github.com/neovim/nvim-lspconfig',
-	'https://github.com/folke/neodev.nvim',
+	'https://github.com/folke/lazydev.nvim',
 	'https://github.com/mason-org/mason-lspconfig.nvim',
 	'https://github.com/folke/trouble.nvim',
 	'https://github.com/nvimtools/none-ls.nvim',
@@ -744,6 +744,7 @@ local plugin_configs = {
 					end),
 				}),
 				sources = cmp.config.sources({
+					{ name = 'lazydev', group_index = 0 },
 					{ name = 'nvim_lsp' },
 					{ name = 'buffer' },
 					{ name = 'path' },
