@@ -747,16 +747,6 @@ local plugin_configs = {
 			]])
 		end,
 	},
-	{
-		'habamax/vim-godot',
-		config = function()
-			vim.lsp.config('gdscript', {
-				capabilities = require('cmp_nvim_lsp').default_capabilities(
-					vim.lsp.protocol.make_client_capabilities()
-				),
-			})
-		end,
-	},
 	-- Colours
 	{
 		'catppuccin/nvim',

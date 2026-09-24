@@ -202,6 +202,11 @@ vim.lsp.config('lua_ls', {
 	}
 })
 
+vim.lsp.config('gdscript', {
+	capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
+vim.lsp.enable('gdscript')
+
 masonLsp.setup({
 	ensure_installed = {
 		'bashls',
