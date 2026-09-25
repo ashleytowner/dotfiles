@@ -86,6 +86,8 @@ alias -g ......="../../../../.."
 
 alias unzip-all="find . -maxdepth 1 -name '*.zip' | parallel unzip '{}' -d '{.}'"
 
+alias venv="source .venv/bin/activate"
+
 # Set a yank & put command
 if which xclip > /dev/null
 then
