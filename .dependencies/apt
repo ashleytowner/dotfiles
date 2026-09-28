@@ -2,3 +2,4 @@ ripgrep
 tmux
 jq
 tree-sitter-cli
+git-delta

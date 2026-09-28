@@ -1,5 +1,11 @@
 [core]
-	editor="nvim"
+	editor = "nvim"
+	pager = "delta"
+[delta]
+	line-numbers = true
+	side-by-side = true
+	navigate = true
+	features = catppuccin-macchiato
 [user]
 	email = "git@ashtowner.com"
 	name = "Ashley Towner"
@@ -47,6 +53,7 @@
 	wd = "diff --word-diff"
 [include]
 	path = "~/.config/local_override/git/.gitconfig"
+	path = "~/dotfiles/git/catppuccin-delta/catppuccin.gitconfig"
 [pull]
 	rebase = true
 [safe]
