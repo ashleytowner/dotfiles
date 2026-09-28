@@ -6,6 +6,7 @@
 	side-by-side = true
 	navigate = true
 	features = catppuccin-macchiato
+	hyperlinks = true
 [user]
 	email = "git@ashtowner.com"
 	name = "Ashley Towner"
