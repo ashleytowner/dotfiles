@@ -636,6 +636,27 @@ local plugin_configs = {
 	{
 		'mhartington/formatter.nvim',
 		config = function()
+			local function jq()
+				local args
+
+				if vim.bo.expandtab then
+					local indent_size = vim.bo.shiftwidth
+					if indent_size == 0 then
+						indent_size = vim.bo.tabstop
+					end
+
+					args = { '--indent', tostring(indent_size), '.' }
+				else
+					args = { '--tab', '.' }
+				end
+
+				return {
+					exe = 'jq',
+					args = args,
+					stdin = true,
+				}
+			end
+
 			local config = {
 				logging = false,
 				filetype = {
@@ -648,7 +669,7 @@ local plugin_configs = {
 						'formatter.filetypes.typescriptreact'
 					).prettierd,
 					html = require('formatter.filetypes.html').prettierd,
-					json = require('formatter.filetypes.json').jq,
+					json = jq,
 					lua = require('formatter.filetypes.lua').stylua,
 					css = require('formatter.filetypes.css').prettierd,
 					scss = require('formatter.filetypes.css').prettierd,
