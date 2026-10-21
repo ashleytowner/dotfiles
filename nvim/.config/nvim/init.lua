@@ -91,6 +91,25 @@ vim.cmd('syntax enable')
 
 require('keymaps')
 
+-- WSL has no built-in clipboard provider, so use the Windows clipboard.
+-- clip.exe only reads non-ASCII text correctly as UTF-16LE.
+if vim.fn.has('wsl') == 1 then
+	local copy = { 'sh', '-c', 'iconv -f utf-8 -t utf-16le | clip.exe' }
+	local paste = {
+		'powershell.exe',
+		'-NoLogo',
+		'-NoProfile',
+		'-c',
+		'[Console]::OutputEncoding=[Text.Encoding]::UTF8; [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+	}
+	vim.g.clipboard = {
+		name = 'WslClipboard',
+		copy = { ['+'] = copy, ['*'] = copy },
+		paste = { ['+'] = paste, ['*'] = paste },
+		cache_enabled = 0,
+	}
+end
+
 if (vim.g.neovide) then
 	vim.o.guifont = 'JetBrains Mono:h18'
 end
