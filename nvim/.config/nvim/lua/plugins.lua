@@ -673,7 +673,10 @@ local plugin_configs = {
 					lua = require('formatter.filetypes.lua').stylua,
 					css = require('formatter.filetypes.css').prettierd,
 					scss = require('formatter.filetypes.css').prettierd,
-					python = require('formatter.filetypes.python').black,
+					python = {
+						require('formatter.filetypes.python').iruff, -- ruff check --select I --fix (import sorting)
+						require('formatter.filetypes.python').ruff,  -- ruff format
+					},
 				},
 			}
 
