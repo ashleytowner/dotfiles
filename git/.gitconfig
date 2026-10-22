@@ -8,6 +8,8 @@
 	features = catppuccin-macchiato
 	hyperlinks = true
 	tabs = 2
+[interactive]
+	diffFilter = "delta --color-only"
 [user]
 	email = "git@ashtowner.com"
 	name = "Ashley Towner"
