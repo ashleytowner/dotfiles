@@ -211,6 +211,16 @@ vim.lsp.config('lua_ls', {
 	},
 })
 
+vim.lsp.config('pyright', {
+	settings = { python = { analysis = {} } },
+	-- Projects with their own mypy get type checking from it via none-ls; elsewhere pyright checks types
+	before_init = function(_, config)
+		local has_mypy = config.root_dir
+			and vim.fn.executable(config.root_dir .. '/.venv/bin/mypy') == 1
+		config.settings.python.analysis.typeCheckingMode = has_mypy and 'off' or 'standard'
+	end,
+})
+
 vim.lsp.config('gdscript', {
 	capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })

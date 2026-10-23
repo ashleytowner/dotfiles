@@ -627,10 +627,23 @@ local plugin_configs = {
 							)
 						end
 					end,
+					-- mypy is registered in null_ls.setup below, from the project's .venv only
+					['mypy'] = function() end,
 				},
 			})
 
-			null_ls.setup()
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.diagnostics.mypy.with({
+						-- Use the project's mypy so its version and dependencies match CI
+						only_local = '.venv/bin',
+						condition = function(utils)
+							return utils.root_has_file({ '.venv/bin/mypy' })
+						end,
+						method = null_ls.methods.DIAGNOSTICS,
+					}),
+				},
+			})
 		end,
 	},
 	{
