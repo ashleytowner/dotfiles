@@ -690,6 +690,9 @@ local plugin_configs = {
 						require('formatter.filetypes.python').iruff, -- ruff check --select I --fix (import sorting)
 						require('formatter.filetypes.python').ruff,  -- ruff format
 					},
+					markdown = {
+						require('formatter.filetypes.markdown').prettierd
+					},
 				},
 			}
 
