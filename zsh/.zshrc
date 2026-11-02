@@ -109,6 +109,17 @@ then
     alias put="pbpaste"
 fi
 
+if grep -qi microsoft /proc/version 2> /dev/null
+then
+    # clip.exe only reads non-ASCII text correctly as UTF-16LE
+    function yank() {
+      input=$(cat)
+      echo ${input}
+      echo ${input} | iconv -f utf-8 -t utf-16le | clip.exe
+    }
+    alias put="powershell.exe -NoLogo -NoProfile -c '[Console]::OutputEncoding=[Text.Encoding]::UTF8; [Console]::Out.Write(\$(Get-Clipboard -Raw).tostring().replace(\"\`r\", \"\"))'"
+fi
+
 if which xdg-open > /dev/null
 then
   alias open=xdg-open
