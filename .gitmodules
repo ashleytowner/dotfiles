@@ -7,24 +7,6 @@
 [submodule "zsh/.config/zsh/autoload/powerlevel10k"]
 	path = zsh/.config/zsh/autoload/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k
-[submodule "zsh/bin/pert-calculator"]
-	path = zsh/bin/pert-calculator
-	url = https://github.com/ashleytowner/pert-calculator
-[submodule "kitty/.config/kitty/themes/catppuccin"]
-	path = kitty/.config/kitty/themes/catppuccin
-	url = https://github.com/catppuccin/kitty
-[submodule "tmux/.config/tmux/tpm"]
-	path = tmux/.config/tmux/tpm
-	url = https://github.com/tmux-plugins/tpm
-[submodule "alacritty/.config/alacritty/catppuccin"]
-	path = alacritty/.config/alacritty/catppuccin
-	url = https://github.com/catppuccin/alacritty.git
-[submodule "tmux/.config/tmux/plugins/tmux"]
-	path = tmux/.config/tmux/plugins/tmux
-	url = https://github.com/catppuccin/tmux
-[submodule "tmux/.config/tmux/plugins/tpm"]
-	path = tmux/.config/tmux/plugins/tpm
-	url = https://github.com/tmux-plugins/tpm
 [submodule "git/catppuccin-delta"]
 	path = git/catppuccin-delta
 	url = https://github.com/catppuccin/delta
