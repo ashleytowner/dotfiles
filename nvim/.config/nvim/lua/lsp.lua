@@ -218,6 +218,11 @@ vim.lsp.config('pyright', {
 		local has_mypy = config.root_dir
 			and vim.fn.executable(config.root_dir .. '/.venv/bin/mypy') == 1
 		config.settings.python.analysis.typeCheckingMode = has_mypy and 'off' or 'standard'
+		-- Resolve imports against the project's own venv rather than whatever python is on PATH
+		local venv_python = config.root_dir and config.root_dir .. '/.venv/bin/python'
+		if venv_python and vim.fn.executable(venv_python) == 1 then
+			config.settings.python.pythonPath = venv_python
+		end
 	end,
 })
 
