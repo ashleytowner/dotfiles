@@ -52,6 +52,8 @@ vim.pack.add({
 	'https://github.com/hrsh7th/cmp-calc',
 	'https://github.com/hrsh7th/cmp-cmdline',
 	'https://github.com/hrsh7th/cmp-nvim-lsp',
+	'https://github.com/goerz/jupytext.nvim',
+	'https://github.com/jmbuhr/otter.nvim',
 	'https://github.com/hrsh7th/cmp-path',
 	'https://github.com/onsails/lspkind-nvim',
 	'https://github.com/hrsh7th/cmp-emoji',
@@ -80,6 +82,103 @@ vim.keymap.set('n', '<leader>u', '<cmd>Undotree<cr>', {
 -- provide configuration callbacks.
 local plugin_configs = {
 	-- Base
+	{
+		'goerz/jupytext.nvim',
+		config = function()
+			local jupytextOk, jupytext = pcall(require, 'jupytext')
+			if not jupytextOk then
+				return
+			end
+
+			local opts = {
+				jupytext = 'jupytext',
+				format = "markdown",
+				update = true,
+				filetype = require("jupytext").get_filetype,
+				new_template = require("jupytext").default_new_template(),
+				sync_patterns = { '*.md', '*.py', '*.jl', '*.R', '*.Rmd', '*.qmd' },
+				autosync = true,
+				handle_url_schemes = true,
+			}
+
+			jupytext.setup(opts)
+		end
+	},
+	{
+		'jmbuhr/otter.nvim',
+		config = function()
+			-- otter finds code cells through treesitter injections, which only exist for
+			-- languages with an installed parser (markdown ships with nvim; python doesn't)
+			require('nvim-treesitter').install({ 'python' })
+
+			local otter = require("otter")
+			otter.setup({
+				lsp = {
+					-- `:h events` that cause the diagnostics to update. Set to:
+					-- { "BufWritePost", "InsertLeave", "TextChanged" } for less performant
+					-- but more instant diagnostic updates
+					diagnostic_update_events = { "BufWritePost" },
+					-- function to find the root dir where the otter-ls is started
+					root_dir = function(_, bufnr)
+						return vim.fs.root(bufnr or 0, {
+							".git",
+							"_quarto.yml",
+							"package.json",
+						}) or vim.fn.getcwd(0)
+					end,
+				},
+				-- options related to the otter buffers
+				buffers = {
+					-- if set to true, the filetype of the otterbuffers will be set.
+					-- otherwise only the autocommand of lspconfig that attaches
+					-- the language server will be executed without setting the filetype
+					--- this setting is deprecated and will default to true in the future
+					set_filetype = true,
+					-- write <path>.otter.<embedded language extension> files
+					-- to disk on save of main buffer.
+					-- usefule for some linters that require actual files.
+					-- otter files are deleted on quit or main buffer close
+					write_to_disk = false,
+					-- a table of preambles for each language. The key is the language and the value is a table of strings that will be written to the otter buffer starting on the first line.
+					preambles = {},
+					-- a table of postambles for each language. The key is the language and the value is a table of strings that will be written to the end of the otter buffer.
+					postambles = {},
+					-- A table of patterns to ignore for each language. The key is the language and the value is a lua match pattern to ignore.
+					-- lua patterns: https://www.lua.org/pil/20.2.html
+					ignore_pattern = {
+						-- ipython cell magic (lines starting with %) and shell commands (lines starting with !)
+						python = "^(%s*[%%!].*)",
+					},
+				},
+				-- remove whitespace from the beginning of the code chunks when writing to the otter buffers
+				-- and calculate it back in when handling lsp requests
+				handle_leading_whitespace = true,
+				-- mapping of filetypes to extensions for those not already included in otter.tools.extensions
+				-- e.g. ["bash"] = "sh"
+				extensions = {},
+				-- add event listeners for LSP events for debugging
+				debug = false,
+				verbose = { -- set to false to disable all verbose messages
+					no_code_found = false, -- warn if otter.activate is called, but no injected code was found
+				},
+			})
+
+			-- setup() only configures otter; it does nothing until activated per buffer.
+			-- jupytext opens notebooks as markdown, so attach otter to those buffers to
+			-- get LSP (pyright/ty) inside their ```python cells
+			vim.api.nvim_create_autocmd('FileType', {
+				group = vim.api.nvim_create_augroup('OtterNotebooks', { clear = true }),
+				pattern = 'markdown',
+				callback = function(event)
+					if vim.api.nvim_buf_get_name(event.buf):match('%.ipynb$') then
+						vim.api.nvim_buf_call(event.buf, function()
+							otter.activate({ 'python' })
+						end)
+					end
+				end,
+			})
+		end
+	},
 	{
 		'nvim-telescope/telescope.nvim',
 		config = function()
