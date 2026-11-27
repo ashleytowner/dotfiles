@@ -211,20 +211,33 @@ vim.lsp.config('lua_ls', {
 	},
 })
 
-local python_env = require('python_env')
+-- Python: the project's .venv decides who checks types
+--   .venv/bin/ty    ty is the whole language server
+--   .venv/bin/mypy  pyright for language features, mypy (via none-ls) for types
+--   otherwise       pyright does both
+local function python_root(bufnr)
+	-- .venv first, so a uv workspace member resolves to the workspace root
+	return vim.fs.root(bufnr, {
+		'.venv',
+		{ 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', '.git' },
+	})
+end
 
--- Python: ty projects get ty as their whole language server; everywhere else pyright
--- provides the language features, and checks types too unless mypy (via none-ls) does
+local function venv_bin(root, name)
+	local path = root and root .. '/.venv/bin/' .. name
+	return path and vim.fn.executable(path) == 1 and path or nil
+end
+
 vim.lsp.config('ty', {
 	root_dir = function(bufnr, on_dir)
-		local root = python_env.root(bufnr)
-		if python_env.checker(root) == 'ty' then
+		local root = python_root(bufnr)
+		if venv_bin(root, 'ty') then
 			on_dir(root)
 		end
 	end,
 	cmd = function(dispatchers, config)
 		return vim.lsp.rpc.start(
-			{ python_env.bin(config.root_dir, 'ty'), 'server' },
+			{ venv_bin(config.root_dir, 'ty'), 'server' },
 			dispatchers,
 			{ cwd = config.root_dir }
 		)
@@ -234,26 +247,16 @@ vim.lsp.config('ty', {
 vim.lsp.config('pyright', {
 	settings = { python = { analysis = {} } },
 	root_dir = function(bufnr, on_dir)
-		local root = python_env.root(bufnr)
-		if python_env.checker(root) ~= 'ty' then
+		local root = python_root(bufnr)
+		if not venv_bin(root, 'ty') then
 			on_dir(root)
 		end
 	end,
-	cmd = function(dispatchers, config)
-		return vim.lsp.rpc.start(
-			{ python_env.bin(config.root_dir, 'pyright-langserver'), '--stdio' },
-			dispatchers,
-			{ cwd = config.root_dir }
-		)
-	end,
 	before_init = function(_, config)
-		local uses_mypy = python_env.checker(config.root_dir) == 'mypy'
+		local uses_mypy = venv_bin(config.root_dir, 'mypy') ~= nil
 		config.settings.python.analysis.typeCheckingMode = uses_mypy and 'off' or 'standard'
 		-- Resolve imports against the project's own venv rather than whatever python is on PATH
-		local venv_python = python_env.local_bin(config.root_dir, 'python')
-		if venv_python then
-			config.settings.python.pythonPath = venv_python
-		end
+		config.settings.python.pythonPath = venv_bin(config.root_dir, 'python')
 	end,
 })
 vim.lsp.enable({ 'ty', 'pyright' })
