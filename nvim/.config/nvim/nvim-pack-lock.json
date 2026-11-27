@@ -60,6 +60,10 @@
       "rev": "6e83486f351066e38c3ae9daad2a4f01dfb262ad",
       "src": "https://github.com/smoka7/hop.nvim"
     },
+    "jupytext.nvim": {
+      "rev": "2f300e8147ef01a764a6da25533c15ab738e7064",
+      "src": "https://github.com/goerz/jupytext.nvim"
+    },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim"
@@ -132,6 +136,10 @@
     "oil.nvim": {
       "rev": "b73018b75affd13fa38e2fc94ef753b465f770d7",
       "src": "https://github.com/stevearc/oil.nvim"
+    },
+    "otter.nvim": {
+      "rev": "6f05811621460eca983bf2cd877e63c59a40720e",
+      "src": "https://github.com/jmbuhr/otter.nvim"
     },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
