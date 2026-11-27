@@ -211,20 +211,52 @@ vim.lsp.config('lua_ls', {
 	},
 })
 
+local python_env = require('python_env')
+
+-- Python: ty projects get ty as their whole language server; everywhere else pyright
+-- provides the language features, and checks types too unless mypy (via none-ls) does
+vim.lsp.config('ty', {
+	root_dir = function(bufnr, on_dir)
+		local root = python_env.root(bufnr)
+		if python_env.checker(root) == 'ty' then
+			on_dir(root)
+		end
+	end,
+	cmd = function(dispatchers, config)
+		return vim.lsp.rpc.start(
+			{ python_env.bin(config.root_dir, 'ty'), 'server' },
+			dispatchers,
+			{ cwd = config.root_dir }
+		)
+	end,
+})
+
 vim.lsp.config('pyright', {
 	settings = { python = { analysis = {} } },
-	-- Projects with their own mypy get type checking from it via none-ls; elsewhere pyright checks types
+	root_dir = function(bufnr, on_dir)
+		local root = python_env.root(bufnr)
+		if python_env.checker(root) ~= 'ty' then
+			on_dir(root)
+		end
+	end,
+	cmd = function(dispatchers, config)
+		return vim.lsp.rpc.start(
+			{ python_env.bin(config.root_dir, 'pyright-langserver'), '--stdio' },
+			dispatchers,
+			{ cwd = config.root_dir }
+		)
+	end,
 	before_init = function(_, config)
-		local has_mypy = config.root_dir
-			and vim.fn.executable(config.root_dir .. '/.venv/bin/mypy') == 1
-		config.settings.python.analysis.typeCheckingMode = has_mypy and 'off' or 'standard'
+		local uses_mypy = python_env.checker(config.root_dir) == 'mypy'
+		config.settings.python.analysis.typeCheckingMode = uses_mypy and 'off' or 'standard'
 		-- Resolve imports against the project's own venv rather than whatever python is on PATH
-		local venv_python = config.root_dir and config.root_dir .. '/.venv/bin/python'
-		if venv_python and vim.fn.executable(venv_python) == 1 then
+		local venv_python = python_env.local_bin(config.root_dir, 'python')
+		if venv_python then
 			config.settings.python.pythonPath = venv_python
 		end
 	end,
 })
+vim.lsp.enable({ 'ty', 'pyright' })
 
 vim.lsp.config('gdscript', {
 	capabilities = require('cmp_nvim_lsp').default_capabilities(),
