@@ -627,18 +627,36 @@ local plugin_configs = {
 							)
 						end
 					end,
-					-- mypy is registered in null_ls.setup below, from the project's .venv only
+					-- mypy is registered in null_ls.setup below, only for projects that use it
 					['mypy'] = function() end,
 				},
 			})
 
+			local python_env = require('python_env')
+
 			null_ls.setup({
 				sources = {
 					null_ls.builtins.diagnostics.mypy.with({
-						-- Use the project's mypy so its version and dependencies match CI
-						only_local = '.venv/bin',
-						condition = function(utils)
-							return utils.root_has_file({ '.venv/bin/mypy' })
+						runtime_condition = function(params)
+							local root = python_env.root(params.bufnr)
+							return python_env.checker(root) == 'mypy'
+								and vim.fn.executable(python_env.bin(root, 'mypy')) == 1
+						end,
+						-- Prefer the project's mypy so its version and dependencies match CI
+						command = function(params)
+							return python_env.bin(python_env.root(params.bufnr), 'mypy')
+						end,
+						cwd = function(params)
+							return python_env.root(params.bufnr)
+						end,
+						-- A global mypy still needs to see the project's installed dependencies
+						extra_args = function(params)
+							local root = python_env.root(params.bufnr)
+							local venv_python = python_env.local_bin(root, 'python')
+							if venv_python and not python_env.local_bin(root, 'mypy') then
+								return { '--python-executable', venv_python }
+							end
+							return {}
 						end,
 						method = null_ls.methods.DIAGNOSTICS,
 					}),
